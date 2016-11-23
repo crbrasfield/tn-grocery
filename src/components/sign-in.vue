@@ -5,6 +5,7 @@
     <br>
     Password:<input type="input" name="password" v-model="password">
     <br>
+    <button type="button" name="signInButton" @click="signUp">Sign Up</button>
     <button type="button" name="signInButton" @click="signIn">Sign In</button>
     <div class="success-message">
       {{ successMessage }}
@@ -30,7 +31,7 @@ export default {
     })
   },
   methods: {
-    signIn () {
+    signUp () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
           this.successMessage = 'Account created!'
@@ -40,6 +41,13 @@ export default {
       .catch((error) => {
         this.errorMessage = error.message
         this.successMessage = ''
+      })
+    },
+    signIn () {
+      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      .then((res) => {
+        console.log(res.uid)
+        router.push({path: `dashboard/${res.uid}`})
       })
     },
     dashboard () {

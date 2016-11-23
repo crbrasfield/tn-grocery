@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  name: 'dashboard'
+  name: 'dashboard',
+  mounted: function () {
+    const route = this.$root.$route
+    console.log(route)
+  }
 }
 </script>
 
