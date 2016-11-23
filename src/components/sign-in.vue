@@ -1,16 +1,50 @@
 <template>
   <div id="sign-in">
     <h1>Sign in page</h1>
-    <input type="input" name="userName" value="">
-    <button type="button" name="signInButton">Sign In</button>
+    TheraNest Email:<input type="input" name="userName" v-model="email">
+    <br>
+    Password:<input type="input" name="password" v-model="password">
+    <br>
+    <button type="button" name="signInButton" @click="signIn">Sign In</button>
+    <div class="success-message">
+      {{ successMessage }}
+    </div>
+    <div class="error-message">
+      {{errorMessage}}
+    </div>
+
+    <button type="button" name="button" @click="dashboard">Jump to dashboard</button>
   </div>
 </template>
 
 <script>
+import router from '../router.js'
 export default {
   name: 'sign-in',
   data () {
-    return {}
+    return ({
+      email: '',
+      password: '',
+      successMessage: '',
+      errorMessage: ''
+    })
+  },
+  methods: {
+    signIn () {
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+      .then((res) => {
+          this.successMessage = 'Account created!'
+          this.errorMessage = ''
+        }
+      )
+      .catch((error) => {
+        this.errorMessage = error.message
+        this.successMessage = ''
+      })
+    },
+    dashboard () {
+      router.push('dashboard')
+    }
   }
 }
 </script>
