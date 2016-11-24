@@ -28,6 +28,8 @@
 
 <script>
 import router from '../router.js'
+import { store } from '../main.js'
+
 export default {
   name: 'sign-up',
   data () {
@@ -44,15 +46,15 @@ export default {
     signIn () {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        console.log(res.uid)
-        router.push({path: `dashboard/${res.uid}`})
+        store.commit('setUserId', res.uid)
+        router.push({path: 'dashboard'})
       })
       .catch((error) => {
         this.errorMessage = error.message
       })
     },
     dashboard () {
-      router.push('dashboard')
+      console.log(store.state.userId)
     },
   }
 }
