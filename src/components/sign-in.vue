@@ -5,6 +5,10 @@
     <br>
     Password:<input type="input" name="password" v-model="password">
     <br>
+    First Name:<input type="input" name="firstName" v-model="firstName">
+    <br>
+    Last Name:<input type="input" name="lastName" v-model="lastName">
+    <br>
     <button type="button" name="signInButton" @click="signUp">Sign Up</button>
     <button type="button" name="signInButton" @click="signIn">Sign In</button>
     <div class="success-message">
@@ -21,11 +25,13 @@
 <script>
 import router from '../router.js'
 export default {
-  name: 'sign-in',
+  name: 'sign-up',
   data () {
     return ({
       email: '',
       password: '',
+      firstName: '',
+      lastName: '',
       successMessage: '',
       errorMessage: ''
     })
@@ -36,6 +42,7 @@ export default {
       .then((res) => {
           this.successMessage = 'Account created!'
           this.errorMessage = ''
+          this.delayedRoute('login')
         }
       )
       .catch((error) => {
@@ -43,15 +50,20 @@ export default {
         this.successMessage = ''
       })
     },
-    signIn () {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-      .then((res) => {
-        console.log(res.uid)
-        router.push({path: `dashboard/${res.uid}`})
-      })
-    },
+    // signIn () {
+    //   firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+    //   .then((res) => {
+    //     console.log(res.uid)
+    //     router.push({path: `dashboard/${res.uid}`})
+    //   })
+    // },
     dashboard () {
       router.push('dashboard')
+    },
+    delayedRoute (route) {
+      setTimeout(() => {
+        router.push({path: route})
+      }, 1000)
     }
   }
 }
