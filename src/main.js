@@ -5,9 +5,10 @@ import router from './router'
 import config from './firebase/index.js'
 import vueStore from './store.js'
 
-Vue.use(Vuex) // initializing the store
+Vue.use(Vuex)
 export const store = new Vuex.Store(vueStore)
-Vue.use(VueRouter) // initializing router
+store.commit('setUserId', document.cookie) // storing the current userID as the browser's cookie if it exists.
+Vue.use(VueRouter)
 
 firebase.initializeApp(config) // connecting the app to firebase
 

@@ -22,7 +22,7 @@
       <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signIn">Sign In</button>
     </div>
 
-    <button type="button" name="button" @click="dashboard">Jump to dashboard</button>
+    <button type="button" name="button" @click="logId">Log current user ID</button>
   </div>
 </template>
 
@@ -46,15 +46,16 @@ export default {
     signIn () {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        store.commit('setUserId', res.uid)
+        document.cookie = res.uid
         router.push({path: 'dashboard'})
       })
       .catch((error) => {
         this.errorMessage = error.message
       })
     },
-    dashboard () {
-      console.log(store.state.userId)
+    logId () {
+      // console.log(store.state.userId)
+      console.log(document.cookie)
     },
   }
 }

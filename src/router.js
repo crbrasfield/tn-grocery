@@ -7,7 +7,7 @@ import NotFound from './components/not-found.vue'
 const routes = [
   { path: '/', component: SignIn },
   { path: '/sign-up', component: SignUp },
-  { path: '/dashboard/:id', component: Dashboard },
+  { path: '/dashboard', component: Dashboard },
   { path: '/not-found', component: NotFound }
 ]
 

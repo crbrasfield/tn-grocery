@@ -5,11 +5,11 @@
 </template>
 
 <script>
+import { store } from '../main.js'
 export default {
   name: 'dashboard',
   mounted: function () {
-    const route = this.$root.$route
-    console.log(route)
+    console.log(store.state.userId)
   }
 }
 </script>
