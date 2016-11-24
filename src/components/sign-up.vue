@@ -1,23 +1,40 @@
 <template>
   <div id="sign-up">
     <h1>Sign Up</h1>
-    TheraNest Email:<input type="input" name="userName" v-model="email">
-    <br>
-    Password:<input type="input" name="password" v-model="password">
-    <br>
-    First Name:<input type="input" name="firstName" v-model="firstName">
-    <br>
-    Last Name:<input type="input" name="lastName" v-model="lastName">
-    <br>
-    <button type="button" name="signInButton" @click="signUp">Register</button>
+
+    <div class="flex-input-container">
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        email
+        <input class="mdl-textfield__input" type="text" id="email" v-model="email">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        password
+        <input class="mdl-textfield__input" type="password" id="password" v-model="password">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        first name
+        <input class="mdl-textfield__input" type="firstName" id="firstName" v-model="firstName">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        last name
+        <input class="mdl-textfield__input" type="lastName" id="lastName" v-model="lastName">
+      </div>
+    </div>
+
+    <div class="flex-button-container">
+      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="backButton" @click="back">Back</button>
+      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="registerButton" @click="register">Sign Up</button>
+    </div>
+
     <div class="success-message">
       {{ successMessage }}
     </div>
     <div class="error-message">
       {{errorMessage}}
     </div>
-
-    <button type="button" name="button" @click="dashboard">Jump to dashboard</button>
   </div>
 </template>
 
@@ -36,7 +53,7 @@ export default {
     })
   },
   methods: {
-    signUp () {
+    register () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
           this.successMessage = 'Account created!'
@@ -48,6 +65,9 @@ export default {
         this.errorMessage = error.message
         this.successMessage = ''
       })
+    },
+    back () {
+      router.push('/')
     },
     dashboard () {
       router.push('dashboard')
@@ -71,6 +91,24 @@ export default {
   margin-top: 60px;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.flex-input-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex-button-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+
 .container {
   width: 1000px;
   margin: auto;
@@ -82,6 +120,8 @@ export default {
 
 .button {
   margin: 10px;
+  background-color: #9dc641;
+  color: white;
 }
 
 h1, h2 {

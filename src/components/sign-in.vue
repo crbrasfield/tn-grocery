@@ -1,17 +1,25 @@
 <template>
   <div id="sign-in">
     <h1>Sign In</h1>
-    TheraNest Email:<input type="input" name="userName" v-model="email">
-    <br>
-    Password:<input type="input" name="password" v-model="password">
-    <br>
-    <button type="button" name="signInButton" @click="signUp">Sign Up</button>
-    <button type="button" name="signInButton" @click="signIn">Sign In</button>
-    <div class="success-message">
-      {{ successMessage }}
+    <div class="flex-input-container">
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        email
+        <input class="mdl-textfield__input" type="text" id="emai;" v-model="email">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield text-left">
+        password
+        <input class="mdl-textfield__input" type="password" id="password" v-model="password">
+      </div>
     </div>
+
     <div class="error-message">
       {{errorMessage}}
+    </div>
+
+    <div class="flex-button-container">
+      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signUp">Sign Up</button>
+      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signIn">Sign In</button>
     </div>
 
     <button type="button" name="button" @click="dashboard">Jump to dashboard</button>
@@ -26,7 +34,6 @@ export default {
     return ({
       email: '',
       password: '',
-      successMessage: '',
       errorMessage: ''
     })
   },
@@ -39,6 +46,9 @@ export default {
       .then((res) => {
         console.log(res.uid)
         router.push({path: `dashboard/${res.uid}`})
+      })
+      .catch((error) => {
+        this.errorMessage = error.message
       })
     },
     dashboard () {
@@ -58,6 +68,24 @@ export default {
   margin-top: 60px;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.flex-input-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flex-button-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+
 .container {
   width: 1000px;
   margin: auto;
@@ -69,6 +97,8 @@ export default {
 
 .button {
   margin: 10px;
+  background-color: #9dc641;
+  color: white;
 }
 
 h1, h2 {
