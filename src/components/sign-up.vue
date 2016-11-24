@@ -1,12 +1,15 @@
 <template>
-  <div id="sign-in">
-    <h1>Sign In</h1>
+  <div id="sign-up">
+    <h1>Sign Up</h1>
     TheraNest Email:<input type="input" name="userName" v-model="email">
     <br>
     Password:<input type="input" name="password" v-model="password">
     <br>
-    <button type="button" name="signInButton" @click="signUp">Sign Up</button>
-    <button type="button" name="signInButton" @click="signIn">Sign In</button>
+    First Name:<input type="input" name="firstName" v-model="firstName">
+    <br>
+    Last Name:<input type="input" name="lastName" v-model="lastName">
+    <br>
+    <button type="button" name="signInButton" @click="signUp">Register</button>
     <div class="success-message">
       {{ successMessage }}
     </div>
@@ -26,30 +29,40 @@ export default {
     return ({
       email: '',
       password: '',
+      firstName: '',
+      lastName: '',
       successMessage: '',
       errorMessage: ''
     })
   },
   methods: {
     signUp () {
-      router.push({path: 'sign-up'})
-    },
-    signIn () {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+      firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        console.log(res.uid)
-        router.push({path: `dashboard/${res.uid}`})
+          this.successMessage = 'Account created!'
+          this.errorMessage = ''
+          this.delayedReRoute('sign-in')
+        }
+      )
+      .catch((error) => {
+        this.errorMessage = error.message
+        this.successMessage = ''
       })
     },
     dashboard () {
       router.push('dashboard')
     },
+    delayedReRoute (route) {
+      setTimeout(() => {
+        router.push({path: route})
+      }, 1000)
+    }
   }
 }
 </script>
 
 <style lang='scss' scoped>
-#sign-in {
+#sign-up {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
