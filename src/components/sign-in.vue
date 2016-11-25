@@ -53,7 +53,11 @@ export default {
         this.errorMessage = error.message
       })
     },
-    logId () {},
+    logId () {
+      firebase.database().ref(`users/123`).set({
+        name: 'chase'
+      })
+    },
   }
 }
 </script>
