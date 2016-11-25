@@ -7,3 +7,5 @@ const config = {
 }
 
 export default config
+
+// export const database = firebase.database()

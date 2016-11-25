@@ -31,7 +31,7 @@ import router from '../router.js'
 import { store } from '../main.js'
 
 export default {
-  name: 'sign-up',
+  name: 'sign-in',
   data () {
     return ({
       email: '',
@@ -53,10 +53,7 @@ export default {
         this.errorMessage = error.message
       })
     },
-    logId () {
-      // console.log(store.state.userId)
-      console.log(document.cookie)
-    },
+    logId () {},
   }
 }
 </script>

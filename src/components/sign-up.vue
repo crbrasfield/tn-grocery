@@ -56,9 +56,11 @@ export default {
     register () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
+        // console.log(res)
+          this.createUserDataOnDatabase(res)
           this.successMessage = 'Account created!'
           this.errorMessage = ''
-          this.delayedReRoute('sign-in')
+          this.delayedReRoute('/')
         }
       )
       .catch((error) => {
@@ -69,13 +71,24 @@ export default {
     back () {
       router.push('/')
     },
-    dashboard () {
-      router.push('dashboard')
-    },
     delayedReRoute (route) {
       setTimeout(() => {
         router.push({path: route})
       }, 1000)
+    },
+    createUserDataOnDatabase (data) {
+      const {
+        uid,
+        email,
+      } = data
+      firebase.database().ref(`users/${uid}`).set({
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email,
+        uid,
+        photo: null,
+        admin: false
+      })
     }
   }
 }
