@@ -47,7 +47,7 @@ export default {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then((res) => {
         document.cookie = res.uid
-        router.push({path: 'dashboard'})
+        router.push({path: '/'})
       })
       .catch((error) => {
         this.errorMessage = error.message

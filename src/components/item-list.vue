@@ -14,6 +14,7 @@
         {{item.link}}
       </div>
       <button type="button" name="button" @click="deleteItem(key)">Delete</button>
+      <button type="button" name="button" @click="markAsPurchased(key)">Mark as Purchased</button>
       <br>
     </div>
 
@@ -29,16 +30,16 @@ export default {
     })
   },
   mounted () {
-    console.log('derp')
     const itemList = firebase.database().ref().child(`items`)
     itemList.on('value', (snapshot) => {
-      console.log(snapshot.val())
       this.items = snapshot.val()
     })
   },
   methods: {
+    markAsPurchased (key) {
+      firebase.database().ref(`items/${key}`).update({purchased: true})
+    },
     deleteItem (key) {
-      console.log(key)
       firebase.database().ref(`items/${key}`).remove()
     }
   }
