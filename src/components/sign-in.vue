@@ -54,9 +54,7 @@ export default {
       })
     },
     logId () {
-      firebase.database().ref(`users/123`).set({
-        name: 'chase'
-      })
+      console.log(document.cookie)
     },
   }
 }
