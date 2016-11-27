@@ -1,9 +1,8 @@
 <template>
   <div class="item-list">
-    item list
-
-  <hr>
-
+    <span class="main-head">
+      Item List
+    </span>
     <div class="" v-for="(item, key) in items">
       <Item
       :item="item"
@@ -65,10 +64,11 @@ export default {
   flex-direction: column;
   width: 100%;
   min-height: 350px;
-  background-color: whitesmoke;
+  padding: 15px;
 }
-
-.i {
-  display: flex;
+.main-head {
+  font-size: 20px;
+  font-weight: bold;
+  color: #008cc7;
 }
 </style>
