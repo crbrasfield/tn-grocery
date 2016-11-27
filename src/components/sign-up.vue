@@ -137,6 +137,14 @@ export default {
   color: white;
 }
 
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
 h1, h2 {
   font-weight: normal;
 }

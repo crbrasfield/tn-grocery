@@ -5,25 +5,26 @@
   <hr>
 
     <div class="" v-for="(item, key) in items">
-
-      <div>
-        <!-- Item name: {{ item.name}} -->
-        {{item.name}}
-        <br>
-        <!-- Item link: {{ item.link }} -->
-        {{item.link}}
-      </div>
-      <button type="button" name="button" @click="deleteItem(key)">Delete</button>
-      <button type="button" name="button" @click="markAsPurchased(key)">Mark as Purchased</button>
-      <br>
+      <Item
+      :item="item"
+      :itemKey="key"
+      :hasBeenLiked="hasBeenLiked(key)"
+      :likeCount="likeCount(item.likes || 0)"
+      />
     </div>
 
   </div>
 </template>
 
 <script>
+import Item from './item.vue'
+// import Lodash from 'lodash'
+
 export default {
   name: 'item-list',
+  components: {
+    Item
+  },
   data () {
     return ({
       items: {}
@@ -41,6 +42,19 @@ export default {
     },
     deleteItem (key) {
       firebase.database().ref(`items/${key}`).remove()
+    },
+    hasBeenLiked (key) {
+      console.log(this.items[key])
+      if (this.items[key].likes) {
+        return this.items[key].likes[document.cookie]
+        ? false
+        : true
+      } else {
+        return true
+      }
+    },
+    likeCount (likes) {
+      return Object.keys(likes).length
     }
   }
 }
@@ -49,7 +63,7 @@ export default {
 <style lang='scss' scoped>
 .item-list {
   width: 300px;
-  height: 350px;
+  min-height: 350px;
   background-color: whitesmoke;
 }
 </style>

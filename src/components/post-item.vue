@@ -19,8 +19,7 @@ export default {
     return ({
       itemData: {
         name: '',
-        link: '',
-        purchased: false
+        link: ''
       }
     })
   },
@@ -29,7 +28,9 @@ export default {
       firebase.database().ref().child('items').push({
         name: this.itemData.name,
         link: this.itemData.link,
-        purchased: this.itemData.purchased
+        likes: false,
+        postedBy: document.cookie,
+        purchased: false
       }).then(() => {
         this.itemData.name = ''
         this.itemData.link = ''
