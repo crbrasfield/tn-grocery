@@ -21,12 +21,10 @@ export default {
     ItemList
   },
   data () {
-    return {
-      uid: document.cookie,
-    }
+    return ({})
   },
   mounted () {
-    if (!this.uid) {
+    if (!document.cookie) {
       router.push('/sign-in')
     }
   }
@@ -40,5 +38,6 @@ export default {
   justify-content: space-around;;
   width: 950px;
   margin: auto;
+  margin-top: 50px;
 }
 </style>

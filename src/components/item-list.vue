@@ -18,7 +18,6 @@
 
 <script>
 import Item from './item.vue'
-// import Lodash from 'lodash'
 
 export default {
   name: 'item-list',
@@ -44,7 +43,6 @@ export default {
       firebase.database().ref(`items/${key}`).remove()
     },
     hasBeenLiked (key) {
-      console.log(this.items[key])
       if (this.items[key].likes) {
         return this.items[key].likes[document.cookie]
         ? false

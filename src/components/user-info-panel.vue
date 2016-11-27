@@ -1,7 +1,5 @@
 <template>
   <div class="info-wrap">
-    User info in this module
-    <hr>
     {{ userData.firstName }}
     {{ userData.lastName }}
   </div>
@@ -34,9 +32,15 @@ export default {
 <style lang='scss' scoped>
 
 .info-wrap {
-  width: 300px;
-  height: 350px;
-  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+  background-color: #00b3fe;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
 }
 
 </style>

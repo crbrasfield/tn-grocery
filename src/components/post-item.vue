@@ -1,14 +1,22 @@
 <template>
   <div class="post-item">
-    Post an item in this module
-<hr>
-    <div class="item-form">
-      Item name <input type="text"  value="" v-model="itemData.name">
-      <br>
-      Link to item<input type="text"  value="" v-model="itemData.link">
-      <br>
-      <button type="button" name="button" @click="postItem">Post Item</button>
+    <span class="main-head">
+      Post an Item!
+    </span>
+
+    <div class="mdl-textfield mdl-js-textfield input" >
+      Title
+      <input class="mdl-textfield__input" type="text" v-model="itemData.name">
     </div>
+
+    <div class="mdl-textfield mdl-js-textfield input">
+      Link to item
+      <input class="mdl-textfield__input" type="text" v-model="itemData.link">
+    </div>
+
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button" @click="postItem">
+      Post
+    </button>
   </div>
 </template>
 
@@ -44,6 +52,16 @@ export default {
 .post-item {
   width: 300px;
   height: 350px;
-  background-color: whitesmoke;
+  background-color: white;
+  border-radius: 5px;
+  padding: 15px;
+}
+.main-head {
+  font-size: 20px;
+  font-weight: bold;
+  color: #008cc7;
+}
+.input {
+  color: gray;
 }
 </style>
