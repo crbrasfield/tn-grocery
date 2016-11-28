@@ -34,10 +34,8 @@ export default {
 <style lang='scss' scoped>
 .dashboard-wrap {
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;;
-  width: 950px;
-  margin: auto;
-  margin-top: 50px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 25px;
 }
 </style>

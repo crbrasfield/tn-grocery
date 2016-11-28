@@ -1,6 +1,6 @@
 <template>
   <div class="item-list">
-    display item list
+    item list
 
   <hr>
 
@@ -32,6 +32,7 @@ export default {
   mounted () {
     const itemList = firebase.database().ref().child(`items`)
     itemList.on('value', (snapshot) => {
+      console.log(snapshot.val())
       this.items = snapshot.val()
     })
   },
@@ -60,8 +61,14 @@ export default {
 
 <style lang='scss' scoped>
 .item-list {
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   min-height: 350px;
   background-color: whitesmoke;
+}
+
+.i {
+  display: flex;
 }
 </style>
