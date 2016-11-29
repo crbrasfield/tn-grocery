@@ -101,11 +101,10 @@ export default {
   border-radius: 5px 5px 0 0;
   background-color: white;
   color: #008cc7;
-  box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
+  // box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
   border-top: 1px solid whitesmoke;
   border-left: 1px solid whitesmoke;
   border-right: 1px solid whitesmoke;
-  z-index: -999;
 
 }
 .error-message {

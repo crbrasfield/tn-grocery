@@ -61,8 +61,7 @@ export default {
 }
 .item-container {
   display: flex;
-  min-width: 300px;
-  align-items: center;
+  // align-items: center;
 }
 .post-container {
 
