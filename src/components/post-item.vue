@@ -92,6 +92,7 @@ export default {
   flex-direction: column;
   padding: 10px;
   box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
+  background-color: #fbfbfb;
 }
 .main-head {
   display: inline-block;
@@ -99,7 +100,7 @@ export default {
   font-weight: bold;
   padding: 10px 15px 0px 15px;
   border-radius: 5px 5px 0 0;
-  background-color: white;
+  background-color: #fbfbfb;
   color: #008cc7;
   // box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
   border-top: 1px solid whitesmoke;

@@ -1,12 +1,22 @@
 <template>
-  <div class="">
-
-
-    <div class="" v-for="(message, key) in messages">
-      {{ users[message.postedBy].firstName}}: {{ message.message }}
+  <div class="chat-wrap">
+    <div class="chat-title">
+      <span>TheraChat</span> <span class="material-icons icon">sentiment_satisfied</span>
     </div>
-    <input type="text" v-model="message">
-    <button type="button" name="button" @click="postMesasge">Send</button>
+    <div id="chat-box" class="top-chat-wrap">
+      <div class="chat-text" v-for="(message, key) in messages">
+        <span class="username">{{ users[message.postedBy].firstName}}</span>: {{ message.message }}
+      </div>
+    </div>
+    <div class="bottom-chat-wrap">
+      <form @submit.prevent="postMesasge" class="input">
+        <input type="text" v-model="message" class="input" placeholder="Send a message...">
+      </form>
+      <div class="button material-icons" @click="postMesasge" >
+        present_to_all
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -22,9 +32,10 @@ export default {
     })
   },
   mounted () {
+    this.scrollToTop()
+
     const users = firebase.database().ref().child(`users`)
     users.on('value', (snapshot) => {
-      console.log(snapshot.val())
       this.users = snapshot.val()
     })
     const chatLog = firebase.database().ref().child(`chat`)
@@ -34,62 +45,86 @@ export default {
   },
   methods: {
     postMesasge () {
+      if (!this.message) {
+        return
+      }
       firebase.database().ref().child('chat').push({
         message: this.message,
         postedBy: document.cookie,
         postedAt: moment().format("LLLL")
       })
+      this.message = null;
+      this.scrollToTop()
+    },
+    scrollToTop () {
+      const element = document.getElementById("chat-box")
+      element.scrollTop = element.scrollHeight
     }
   }
   }
 </script>
 
 <style lang='scss' scoped>
-.post-item {
+.chat-wrap {
   display: flex;
+  flex-direction: column;
+  background-color: #fbfbfb;
+  border-radius: 5px;
   padding: 10px;
+  width: 775px;
+  height: 250px;
+  justify-content: space-between;
   box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
+
+
 }
-.main-head {
-  display: inline-block;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 10px 15px 0px 15px;
-  border-radius: 5px 5px 0 0;
+.top-chat-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  font-size: 15px;
+  padding-left: 10px;
+  border-radius: 5px;
+  height: 100%;
+  border: 2px solid #008cc7;
+  padding-top: 5px;
   background-color: white;
-  color: #008cc7;
-  box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
-  border-top: 1px solid whitesmoke;
-  border-left: 1px solid whitesmoke;
-  border-right: 1px solid whitesmoke;
-  float: left;
 }
-.error-message {
-  color: red;
+.bottom-chat-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+
 }
 .input {
-  color: gray;
-  width: 100%;
-}
-.input-title {
-  color: #8dcf3a;
-}
-
-.radio-label {
-  color: gray;
-  margin-right: 50px;
-}
-.required {
-  font-size: 12px;
-}
-.radio-buttons {
   display: flex;
-  justify-content: space-between;
-  flex-direction: row;
+  width: 100%;
+  height: 20px;
+  margin-right: 5px;
+  padding-left: 5px;
+  font-size: 15px;
+  outline: none;
 }
 .button {
-  background-color: #008cc7;
-  color: white;
+    color: #008cc7;
+    font-size: 33px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+.username {
+  font-weight: bold;
+}
+.chat-title {
+  display: flex;
+  padding-bottom: 10px;
+  align-items: center;
+  color:#008cc7;
+  font-weight: bold;
+}
+.icon {
+  padding-left: 2px;
+  font-size: 20px;
 }
 
 </style>

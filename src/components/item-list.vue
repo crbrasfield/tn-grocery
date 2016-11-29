@@ -1,7 +1,7 @@
 <template>
   <div class="item-list-wrap">
     <span class="main-head">
-      Item List
+      Posted Items
     </span>
     <div class="list-type-button" v-bind:class="{ active: !showFullList }" @click="showPurchasedItems">Purchased Items</div>
     <div class="list-type-button" v-bind:class="{ active: showFullList }" @click="showAllItems">All Items</div>
@@ -83,11 +83,13 @@ export default {
 <style lang='scss' scoped>
 .item-list-wrap {
   margin: 5px;
+  width: 540px;
 }
 .item-list {
   width: 100%;
   padding: 10px;
   box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
+  background-color: #fbfbfb;
 }
 .item-wrap {
   padding: 10px;
@@ -103,7 +105,7 @@ export default {
   font-weight: bold;
   padding: 10px 15px 0px 15px;
   border-radius: 5px 5px 0 0;
-  background-color: white;
+  background-color: #fbfbfb;
   color: #008cc7;
   box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
   border-top: 1px solid whitesmoke;
