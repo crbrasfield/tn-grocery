@@ -1,24 +1,42 @@
 <template>
   <div class="item">
       <div>
-        Item: {{ item.name }}
-        <br>
-        <span class="item-link" @click="openItemLink(item.link)">View Item (broken atm)</span>
-        <br>
-        itemKey: {{ itemKey }}
-        <br>
-        purchased: {{ item.purchased }}
-        <br>
-        <div class="like-container" >
-          <span class="like-span" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
-            <span class="like-button-text">{{ likeCount }}</span>
-            <i class="material-icons icon liked">thumb_up</i>
+        <div class="status-row">
+          <span class="item-title" @click="openItemLink(item.link)">
+            {{ item.name }}
           </span>
-          <span class="like-span" @click="likeItem(itemKey)" v-else>
-            <span class="like-button-text">{{ likeCount }}</span>
-            <i class="material-icons icon disliked">thumb_up</i>
-          </span>
+
+          <!-- Item order status -->
+          <div  v-if="item.purchased" class="item-has-been-ordered">
+            Item ordered! <span class="material-icons small-icon">check</span>
+          </div>
+          <div  v-if="!item.purchased" class="item-has-not-been-ordered">
+            Order Pending...
+          </div>
         </div>
+        <span class="office-text">
+          Office: {{ item.office }}
+        </span>
+          <br>
+          <br>
+          "{{ item.description }}"
+        <div class="action-row">
+          <div class="like-container" >
+            <span class="like-span" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
+              <span class="like-button-text liked">{{ likeCount }}</span>
+              <i class="material-icons icon liked">thumb_up</i>
+            </span>
+            <span class="like-span" @click="likeItem(itemKey)" v-else>
+              <span class="like-button-text disliked">{{ likeCount }}</span>
+              <i class="material-icons icon disliked">thumb_up</i>
+            </span>
+          </div>
+          <div v-if="postedByThisUser(item.postedBy)" class="cancel-button" @click="deleteItem(itemKey)">
+            Cancel Request
+            <i class="material-icons small-icon">cancel</i>
+          </div>
+        </div>
+
   </div>
 </template>
 
@@ -52,6 +70,9 @@ export default {
         link,
         '_blank'
       )
+    },
+    postedByThisUser (itemKey) {
+      return itemKey == document.cookie
     }
   },
   computed: {
@@ -64,20 +85,48 @@ export default {
 .item {
   margin-bottom: 5px;
 }
-.item-link {
-  color: blue;
+.status-row {
+  display: flex;
+  justify-content: space-between;
+}
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.item-title {
+  color: #8dcf3a;
+  font-weight: bold;
+  font-size: 20px;
   cursor: pointer;
-  text-decoration: underline;
+}
+.item-link {
+  color: #00b3fe;
+  cursor: pointer;
+}
+.cancel-button {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  float: right;
+  font-size: 12px;
+  background-color: red;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 4px 2px 6px;
+  cursor: pointer;
+}
+.office-text {
+  font-size: 13px;
 }
 .like-container {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  background-color: lightgrey;
   width: 50px;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
 }
 .like-span {
   display: flex;
@@ -85,7 +134,7 @@ export default {
   justify-content: center;
 }
 .like-button-text {
-  font-size: 15px;
+  font-size: 17px;
   margin-right: 5px;
   padding-top: 3px;
 }
@@ -95,7 +144,14 @@ export default {
 .disliked {
   color: grey;
 }
-.icon {
-
+.item-has-been-ordered {
+  color: #8dcf3a;
+}
+.item-has-not-been-ordered {
+  color: lightgrey;
+}
+.small-icon {
+  font-size: 15px;
+  padding-left: 5px;
 }
 </style>

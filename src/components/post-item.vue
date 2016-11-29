@@ -1,31 +1,43 @@
 <template>
-  <div class="post-item mdl-card mdl-shadow--2dp">
+  <div class="post-item-wrap">
     <span class="main-head">
       Post an Item!
     </span>
+    <div class="post-item">
+      <span class="error-message">
+        {{ errorMessage }}
+      </span>
 
-    <div class="mdl-textfield mdl-js-textfield input" >
-      Title
-      <input class="mdl-textfield__input text-input" type="text" v-model="itemData.name">
+      <div class="mdl-textfield mdl-js-textfield input" >
+        <span class="input-title">Title</span>
+        <span class="required">(required)</span>
+        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.name">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield input">
+        <span class="input-title">Link to Item</span>
+        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.link">
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield input">
+        <span class="input-title">Why do you need this</span>
+        <span class="required">(required)</span>
+        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.description">
+      </div>
+      <div class="radio-buttons">
+        <span class="input-title">Office</span>
+        <label class='radio-label'>
+          <input type="radio" value="Main" v-model="itemData.office">Main
+        </label>
+        <label class='radio-label'>
+          <input type="radio" value="Dev" v-model="itemData.office">Dev
+        </label>
+      </div>
+      <br>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button" @click="postItem">
+        Post
+      </button>
     </div>
-
-    <div class="mdl-textfield mdl-js-textfield input">
-      Link to item
-      <input class="mdl-textfield__input text-input" type="text" v-model="itemData.link">
-    </div>
-
-    <div class="radio-buttons">
-      <label class='radio-label'>
-        <input type="radio" value="main" v-model="itemData.office">For main office
-      </label>
-      <label class='radio-label'>
-        <input type="radio" value="dev" v-model="itemData.office">For dev office
-      </label>
-    </div>
-
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button" @click="postItem">
-      Post
-    </button>
   </div>
 </template>
 
@@ -38,23 +50,32 @@ export default {
       itemData: {
         name: '',
         link: '',
-        office: null
-      }
+        office: 'Main',
+        description: ''
+      },
+      errorMessage: ''
     })
   },
   methods: {
     postItem () {
+      if (!this.itemData.name || !this.itemData.description) {
+        this.errorMessage = 'Ya left something blank, dingus!'
+        return
+      }
       firebase.database().ref().child('items').push({
         name: this.itemData.name,
         link: this.itemData.link,
         office: this.itemData.office,
         likes: false,
+        description: this.itemData.description,
         createdAt: moment().format("LLLL"),
         postedBy: document.cookie,
         purchased: false
       }).then(() => {
         this.itemData.name = ''
         this.itemData.link = ''
+        this.errorMessage = '',
+        this.itemData.description = ''
       })
     }
   }
@@ -62,35 +83,57 @@ export default {
 </script>
 
 <style lang='scss' scoped>
+.post-item-wrap {
+  margin: 5px;
+  flex-direction: column;
+}
 .post-item {
   display: flex;
-  width: 50%;
-  margin: 30px 0;
-  background-color: white;
-  border-radius: 5px;
-  padding: 15px;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
 }
 .main-head {
-  font-size: 20px;
+  display: inline-block;
+  font-size: 18px;
   font-weight: bold;
+  padding: 10px 15px 0px 15px;
+  border-radius: 5px 5px 0 0;
+  background-color: white;
   color: #008cc7;
+  box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
+  border-top: 1px solid whitesmoke;
+  border-left: 1px solid whitesmoke;
+  border-right: 1px solid whitesmoke;
+  z-index: -999;
+
+}
+.error-message {
+  color: red;
 }
 .input {
   color: gray;
   width: 100%;
+}
+.input-title {
+  color: #8dcf3a;
 }
 
 .radio-label {
   color: gray;
   margin-right: 50px;
 }
-
+.required {
+  font-size: 12px;
+}
 .radio-buttons {
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  margin: 10px 0;
+}
+.button {
+  background-color: #008cc7;
+  color: white;
 }
 
 </style>

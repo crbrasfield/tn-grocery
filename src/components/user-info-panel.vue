@@ -1,5 +1,7 @@
 <template>
   <div class="info-wrap">
+    You are signed in as
+    <br>
     {{ userData.firstName }}
     {{ userData.lastName }}
   </div>
@@ -32,15 +34,12 @@ export default {
 <style lang='scss' scoped>
 
 .info-wrap {
+  margin: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
   height: 50px;
-  background-color: #00b3fe;
   border-radius: 5px;
-  color: white;
-  font-weight: bold;
 }
 
 </style>

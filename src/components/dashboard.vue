@@ -1,8 +1,23 @@
 <template>
   <div class="dashboard-wrap">
-    <UserInfoPanel />
-    <PostItem />
-    <ItemList />
+
+    <div class="info-container">
+      <UserInfoPanel />
+    </div>
+
+    <div class="chat-container">
+      <Chat />
+    </div>
+    <br>
+
+    <div class="item-container">
+      <div class="post-container">
+        <PostItem />
+      </div>
+      <div class="list-container">
+        <ItemList />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,13 +27,15 @@ import router from '../router.js'
 import PostItem from './post-item.vue'
 import UserInfoPanel from './user-info-panel.vue'
 import ItemList from './item-list.vue'
+import Chat from './chat.vue'
 
 export default {
   name: 'dashboard',
   components: {
     PostItem,
     UserInfoPanel,
-    ItemList
+    ItemList,
+    Chat
   },
   data () {
     return ({})
@@ -33,9 +50,27 @@ export default {
 
 <style lang='scss' scoped>
 .dashboard-wrap {
+  // margin: auto;
+  // max-width: 1200px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 25px;
+  justify-content: center;
+  // flex-direction: row;
+  // margin-top: 25px;
+}
+.item-container {
+  display: flex;
+  min-width: 300px;
+  align-items: center;
+}
+.post-container {
+
+}
+.list-container {
+
+}
+.chat-container {
+
 }
 </style>
