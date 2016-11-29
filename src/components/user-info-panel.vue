@@ -1,6 +1,7 @@
 <template>
   <div class="info-wrap">
-    <div class="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
+    <div v-if="profilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}"></div>
+    <div v-if="!profilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
       <span class="profile-initials">{{ userData.firstName.substring(0,1).toUpperCase() }}</span>
       <span class="profile-initials">{{ userData.lastName.substring(0,1).toUpperCase() }}</span>
     </div>
@@ -17,7 +18,8 @@ export default {
   data () {
     return {
       uid: document.cookie,
-      userData: {}
+      userData: {},
+      profilePhoto: false
     }
   },
   computed () {
@@ -30,28 +32,34 @@ export default {
   methods: {
     handleFiles (e) {
       let image = e.target.files[0]
-      console.log('Hello ', e.target.files[0])
       let storageRef = firebase.storage().ref()
       let nameRef = storageRef.child(image.name)
-      let fullPathRef = storageRef.child(`images/${image.name}`)
+      let fullPathRef = storageRef.child(`profile-photos/${this.uid}`)
       let metadata = {
         customMetadata: {
           'uid': `${this.uid}`
         }
       }
       fullPathRef.put(image, metadata).then(function(snapshot) {
-        console.log('Uplaoded image!', snapshot.val())
+        console.log('Uploaded image!', snapshot)
       })
     }
   },
   mounted () {
-    console.log(this.uid)
     if (!this.uid) {
       router.push('/')
     }
     const userInfo = firebase.database().ref(`users/${this.uid}`)
     userInfo.on('value', (snapshot) => {
       this.userData = snapshot.val()
+    })
+    let userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.uid}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      document.getElementById("profile-bubble").style.backgroundImage=`url(${url})`
+      this.profilePhoto = true
+    }).catch((error) => {
+      console.log(error)
+      this.profilePhoto = false
     })
   }
 }
@@ -75,6 +83,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
 }
 
 .profile-initials {
