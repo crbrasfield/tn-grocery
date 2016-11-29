@@ -64,7 +64,7 @@ export default {
       }
       firebase.database().ref().child('items').push({
         name: this.itemData.name,
-        link: this.itemData.link,
+        link: this.formatLink(this.itemData.link),
         office: this.itemData.office,
         likes: false,
         description: this.itemData.description,
@@ -77,6 +77,12 @@ export default {
         this.errorMessage = '',
         this.itemData.description = ''
       })
+    },
+    formatLink (link) {
+      const prefix = 'http://'
+      if (link.substr(0, prefix.length) !== prefix) {
+        return prefix + link
+      } else return
     }
   }
 }
@@ -102,7 +108,6 @@ export default {
   border-radius: 5px 5px 0 0;
   background-color: #fbfbfb;
   color: #008cc7;
-  // box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
   border-top: 1px solid whitesmoke;
   border-left: 1px solid whitesmoke;
   border-right: 1px solid whitesmoke;

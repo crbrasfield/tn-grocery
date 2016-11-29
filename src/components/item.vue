@@ -104,6 +104,7 @@ export default {
   font-weight: bold;
   font-size: 20px;
   cursor: pointer;
+  text-decoration: none;
 }
 .item-link {
   color: #00b3fe;
