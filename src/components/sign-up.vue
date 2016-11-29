@@ -84,6 +84,7 @@ export default {
       firebase.database().ref(`users/${uid}`).set({
         firstName: this.firstName,
         lastName: this.lastName,
+        initials: `${this.firstName.substring(0,1).toUpperCase()}${this.lastName.substring(0,1).toUpperCase()}`,
         email,
         uid,
         profileTheme: `rgb(0,${Math.floor((Math.random()) * 90) + 100},${Math.floor((Math.random() * 90)) + 100})`,
