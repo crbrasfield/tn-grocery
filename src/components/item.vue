@@ -5,7 +5,6 @@
           <span class="item-title" @click="openItemLink(item.link)">
             {{ item.name }}
           </span>
-
           <!-- Item order status -->
           <div  v-if="item.purchased" class="item-has-been-ordered">
             Item ordered! <span class="material-icons small-icon">check</span>
@@ -31,6 +30,10 @@
               <i class="material-icons icon disliked">thumb_up</i>
             </span>
           </div>
+          <div v-if="userIsAdmin() && !item.purchased" class="mark-purchased-button" @click="markAsPurchased(itemKey)">
+            Mark As purchased
+            <i class="material-icons small-icon">check</i>
+          </div>
           <div v-if="postedByThisUser(item.postedBy)" class="cancel-button" @click="deleteItem(itemKey)">
             Cancel Request
             <i class="material-icons small-icon">cancel</i>
@@ -46,10 +49,16 @@ export default {
   props: ['item', 'itemKey', 'hasBeenLiked', 'likeCount'],
   data () {
     return ({
-      itemData: null
+      itemData: null,
+      users: null
     })
   },
-  mounted () {},
+  mounted () {
+    const users = firebase.database().ref().child(`users`)
+    users.on('value', (snapshot) => {
+      this.users = snapshot.val()
+    })
+  },
   methods: {
     markAsPurchased (key) {
       firebase.database().ref(`items/${key}`).update({purchased: true})
@@ -73,6 +82,9 @@ export default {
     },
     postedByThisUser (itemKey) {
       return itemKey == document.cookie
+    },
+    userIsAdmin () {
+      return this.users[document.cookie].admin
     }
   },
   computed: {
@@ -153,5 +165,17 @@ export default {
 .small-icon {
   font-size: 15px;
   padding-left: 5px;
+}
+.mark-purchased-button {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  float: right;
+  font-size: 12px;
+  color: white;
+  border-radius: 5px;
+  padding: 2px 4px 2px 6px;
+  cursor: pointer;
+  background-color: #8dcf3a;
 }
 </style>
