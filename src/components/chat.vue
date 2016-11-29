@@ -22,6 +22,7 @@
 
 <script>
 import moment from 'moment'
+import Vue from 'vue'
 export default {
   name: 'chat',
   data () {
@@ -32,15 +33,15 @@ export default {
     })
   },
   mounted () {
-    this.scrollToTop()
-
+    const component = this
     const users = firebase.database().ref().child(`users`)
     users.on('value', (snapshot) => {
       this.users = snapshot.val()
     })
     const chatLog = firebase.database().ref().child(`chat`)
-    chatLog.on('value', (snapshot) => {
-      this.messages = snapshot.val()
+    chatLog.on('value', function(snapshot) {
+      component.messages = snapshot.val()
+      Vue.nextTick(component.scrollToTop)
     })
   },
   methods: {
@@ -53,8 +54,7 @@ export default {
         postedBy: document.cookie,
         postedAt: moment().format("LLLL")
       })
-      this.message = null;
-      this.scrollToTop()
+      this.message = null
     },
     scrollToTop () {
       const element = document.getElementById("chat-box")

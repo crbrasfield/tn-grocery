@@ -2,9 +2,9 @@
   <div class="item">
       <div>
         <div class="status-row">
-          <span class="item-title" @click="openItemLink(item.link)">
+          <a class="item-title" target="_blank" :href="item.link" >
             {{ item.name }}
-          </span>
+          </a>
           <!-- Item order status -->
           <div  v-if="item.purchased" class="item-has-been-ordered">
             Item ordered! <span class="material-icons small-icon">check</span>
@@ -74,21 +74,14 @@ export default {
       const uid = document.cookie
       firebase.database().ref(`items/${key}/likes/${uid}`).remove()
     },
-    openItemLink (link) {
-      window.open(
-        link,
-        '_blank'
-      )
-    },
     postedByThisUser (itemKey) {
       return itemKey == document.cookie
     },
     userIsAdmin () {
-      return this.users[document.cookie].admin
+      if (this.users) {
+        return this.users[document.cookie].admin
+      }
     }
-  },
-  computed: {
-    hasUserLikedThisItem () {}
   }
 }
 </script>

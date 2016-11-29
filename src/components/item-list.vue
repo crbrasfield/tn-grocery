@@ -46,7 +46,6 @@ export default {
   mounted () {
     const itemList = firebase.database().ref().child(`items`)
     itemList.on('value', (snapshot) => {
-      console.log(snapshot.val())
       this.items = snapshot.val()
       this.purchasedItems = _.pickBy(snapshot.val(), (item) => item.purchased)
     })
