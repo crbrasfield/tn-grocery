@@ -56,7 +56,7 @@ export default {
     register () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        // console.log(res)
+        console.log('HERE!')
           this.createUserDataOnDatabase(res)
           this.successMessage = 'Account created!'
           this.errorMessage = ''
@@ -86,6 +86,7 @@ export default {
         lastName: this.lastName,
         email,
         uid,
+        profileTheme: `rgb(0,${Math.floor((Math.random()) * 90) + 100},${Math.floor((Math.random() * 90)) + 100})`,
         photo: null,
         admin: false
       })
