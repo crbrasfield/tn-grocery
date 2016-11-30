@@ -1,21 +1,30 @@
 <template>
   <div class="item">
       <div>
-        <div class="status-row">
-          <a class="item-title" target="_blank" :href="item.link" >
-            {{ item.name }}
-          </a>
-          <!-- Item order status -->
-          <div  v-if="item.purchased" class="item-has-been-ordered">
-            Item ordered! <span class="material-icons small-icon">check</span>
+        <div class="header-row">
+          <div class='profile-title-div'>
+            <div v-if="postHasProfilePhoto" class="profile-bubble" v-bind:id="itemKey" v-bind:style="{borderColor: posterData.profileTheme}"></div>
+            <div v-if="!postHasProfilePhoto" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
+              <span class="profile-initials">{{ posterData.firstName.slice(0,1).toUpperCase() }}</span>
+              <span class="profile-initials">{{ posterData.lastName.slice(0,1).toUpperCase() }}</span>
+            </div>
+            <a class="item-title" target="_blank" :href="item.link" >
+              {{ item.name }}
+            </a>
           </div>
-          <div  v-if="!item.purchased" class="item-has-not-been-ordered">
-            Order Pending...
+          <!-- Item order status -->
+          <div class='status-office-div'>
+            <div class="mdl-chip teale">
+              <p class="office-text">{{ item.office }} Office</p>
+            </div>
+            <div  v-if="item.purchased" class="item-has-been-ordered">
+              Item ordered! <span class="material-icons small-icon">check</span>
+            </div>
+            <div  v-if="!item.purchased" class="item-has-not-been-ordered">
+              Order Pending
+            </div>
           </div>
         </div>
-        <span class="office-text">
-          Office: {{ item.office }}
-        </span>
           <br>
           <br>
           "{{ item.description }}"
@@ -50,14 +59,40 @@ export default {
   data () {
     return ({
       itemData: null,
-      users: null
+      users: null,
+      posterData: {},
+      postHasProfilePhoto: null,
+      postProfilePhotoUrl: null
     })
   },
-  mounted () {
+  created () {
     const users = firebase.database().ref().child(`users`)
     users.on('value', (snapshot) => {
       this.users = snapshot.val()
     })
+
+    let postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
+    let postedByUserObject = this.users[postedByUserId]
+    this.posterData = postedByUserObject
+
+
+    let postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+    postedByRef.getDownloadURL().then((url) => {
+      console.log('downloaded post profile photo!')
+      this.postProfilePhotoUrl = url
+      this.postHasProfilePhoto = true
+    }).catch((error) => {
+      this.postHasProfilePhoto = false
+    })
+
+    if (this.postHasProfilePhoto) {
+      document.getElementById(`${this.itemKey}`).style.backgroundImage=`url(${this.postProfilePhotoUrl})`
+    }
+  },
+  updated () {
+    if (this.postHasProfilePhoto) {
+      document.getElementById(`${this.itemKey}`).style.backgroundImage=`url(${this.postProfilePhotoUrl})`
+    }
   },
   methods: {
     markAsPurchased (key) {
@@ -90,9 +125,20 @@ export default {
 .item {
   margin-bottom: 5px;
 }
-.status-row {
+.header-row {
   display: flex;
   justify-content: space-between;
+}
+.profile-title-div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.status-office-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
 }
 .action-row {
   display: flex;
@@ -100,6 +146,7 @@ export default {
   margin-top: 10px;
 }
 .item-title {
+  margin: 0 10px;
   color: #8dcf3a;
   font-weight: bold;
   font-size: 20px;
@@ -124,6 +171,11 @@ export default {
 }
 .office-text {
   font-size: 13px;
+  line-height: 32px;
+  color: white;
+}
+.mdl-chip.teale {
+  background-color: #008cc7;
 }
 .like-container {
   display: flex;
@@ -171,5 +223,24 @@ export default {
   padding: 2px 4px 2px 6px;
   cursor: pointer;
   background-color: #8dcf3a;
+}
+.profile-bubble {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
+  border-width: 3px;
+  border-style: solid;
+}
+.profile-initials {
+  display: flex;
+  color: white;
+  font-size: 14pt;
+  padding: 3%;
 }
 </style>

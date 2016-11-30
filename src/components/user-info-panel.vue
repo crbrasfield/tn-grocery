@@ -1,7 +1,7 @@
 <template>
   <div class="info-wrap">
-    <div v-if="profilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}"></div>
-    <div v-if="!profilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
+    <div v-if="hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}"></div>
+    <div v-if="!hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
       <span class="profile-initials">{{ userData.firstName.substring(0,1).toUpperCase() }}</span>
       <span class="profile-initials">{{ userData.lastName.substring(0,1).toUpperCase() }}</span>
     </div>
@@ -18,10 +18,13 @@ export default {
   data () {
     return {
       uid: document.cookie,
-      userData: {},
-      profilePhoto: false
+      userData: {
+        firstName: null,
+        lastName: null
+      }
     }
   },
+  props: ['hasProfilePhoto', 'profilePhotoUrl'],
   computed () {
     return {
       profileTheme: function () {
@@ -53,14 +56,14 @@ export default {
     userInfo.on('value', (snapshot) => {
       this.userData = snapshot.val()
     })
-    let userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.uid}`)
-    userProfilePhotoRef.getDownloadURL().then((url) => {
-      document.getElementById("profile-bubble").style.backgroundImage=`url(${url})`
-      this.profilePhoto = true
-    }).catch((error) => {
-      console.log(error)
-      this.profilePhoto = false
-    })
+    if (this.profilePhoto) {
+      document.getElementById("profile-bubble").style.backgroundImage=`url(${this.profilePhotoUrl})`
+    }
+  },
+  updated () {
+    if (this.hasProfilePhoto) {
+      document.getElementById("profile-bubble").style.backgroundImage=`url(${this.profilePhotoUrl})`
+    }
   }
 }
 </script>
