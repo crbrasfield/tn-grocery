@@ -3,10 +3,11 @@
       <div>
         <div class="header-row">
           <div class='profile-title-div'>
-            <div v-if="postHasProfilePhoto" class="profile-bubble" v-bind:id="itemKey" v-bind:style="{borderColor: posterData.profileTheme}"></div>
-            <div v-if="!postHasProfilePhoto" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
-              <span class="profile-initials">{{ posterData.firstName.slice(0,1).toUpperCase() }}</span>
-              <span class="profile-initials">{{ posterData.lastName.slice(0,1).toUpperCase() }}</span>
+            <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
+              <img class="profile-image" :src="profileImage"/>
+            </div>
+            <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
+              <span class="profile-initials">{{ posterData.initials }}</span>
             </div>
             <a class="item-title" target="_blank" :href="item.link" >
               {{ item.name }}
@@ -48,7 +49,7 @@
             <i class="material-icons small-icon">cancel</i>
           </div>
         </div>
-
+{{imgUrl}}
   </div>
 </template>
 
@@ -58,41 +59,30 @@ export default {
   props: ['item', 'itemKey', 'hasBeenLiked', 'likeCount'],
   data () {
     return ({
-      itemData: null,
-      users: null,
+      itemData: {},
+      users: {},
       posterData: {},
-      postHasProfilePhoto: null,
-      postProfilePhotoUrl: null
+      postProfilePhotoUrl: false,
+      profileImage: ''
     })
   },
-  created () {
+  mounted () {
     const users = firebase.database().ref().child(`users`)
     users.on('value', (snapshot) => {
       this.users = snapshot.val()
     })
 
-    let postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
-    let postedByUserObject = this.users[postedByUserId]
+    const postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
+    const postedByUserObject = this.users[postedByUserId]
     this.posterData = postedByUserObject
 
 
-    let postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+    const postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
     postedByRef.getDownloadURL().then((url) => {
-      console.log('downloaded post profile photo!')
-      this.postProfilePhotoUrl = url
-      this.postHasProfilePhoto = true
+      this.profileImage = url
     }).catch((error) => {
-      this.postHasProfilePhoto = false
+      return
     })
-
-    if (this.postHasProfilePhoto) {
-      document.getElementById(`${this.itemKey}`).style.backgroundImage=`url(${this.postProfilePhotoUrl})`
-    }
-  },
-  updated () {
-    if (this.postHasProfilePhoto) {
-      document.getElementById(`${this.itemKey}`).style.backgroundImage=`url(${this.postProfilePhotoUrl})`
-    }
   },
   methods: {
     markAsPurchased (key) {
@@ -113,8 +103,10 @@ export default {
       return itemKey == document.cookie
     },
     userIsAdmin () {
-      if (this.users) {
+      if (this.users[document.cookie]) {
         return this.users[document.cookie].admin
+      } else {
+        return false
       }
     }
   }
@@ -231,16 +223,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-repeat: none;
-  background-position: center;
-  background-size: cover;
   border-width: 3px;
   border-style: solid;
+  overflow: hidden;
 }
 .profile-initials {
   display: flex;
   color: white;
   font-size: 14pt;
   padding: 3%;
+}
+.profile-image {
+
+  max-width: 110px;
+  max-height: 110px;
 }
 </style>

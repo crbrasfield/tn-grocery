@@ -1,9 +1,9 @@
 <template>
   <div class="info-wrap">
-    <div v-if="hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}"></div>
+    <div v-if="hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
+    </div>
     <div v-if="!hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
-      <span class="profile-initials">{{ userData.firstName.substring(0,1).toUpperCase() }}</span>
-      <span class="profile-initials">{{ userData.lastName.substring(0,1).toUpperCase() }}</span>
+      <span class="profile-initials">{{ userData.initials }}</span>
     </div>
     <input type='file' id='file-input' v-on:change="handleFiles">
   </div>
@@ -15,22 +15,12 @@ import router from '../router.js'
 
 export default {
   name: 'dashboard',
+  props: ['profilePhotoUrl'],
   data () {
-    return {
+    return ({
       uid: document.cookie,
-      userData: {
-        firstName: null,
-        lastName: null
-      }
-    }
-  },
-  props: ['hasProfilePhoto', 'profilePhotoUrl'],
-  computed () {
-    return {
-      profileTheme: function () {
-        return this.userData.profileTheme
-      }
-    }
+      userData: false
+    })
   },
   methods: {
     handleFiles (e) {
@@ -57,11 +47,6 @@ export default {
       this.userData = snapshot.val()
     })
     if (this.profilePhoto) {
-      document.getElementById("profile-bubble").style.backgroundImage=`url(${this.profilePhotoUrl})`
-    }
-  },
-  updated () {
-    if (this.hasProfilePhoto) {
       document.getElementById("profile-bubble").style.backgroundImage=`url(${this.profilePhotoUrl})`
     }
   }

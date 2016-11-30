@@ -2,7 +2,7 @@
   <div class="dashboard-wrap">
 
     <div class="info-container">
-      <UserInfoPanel :has-profile-photo="hasProfilePhoto" :profile-photo-url="profilePhotoUrl"/>
+      <UserInfoPanel :profilePhotoUrl="profilePhotoUrl" />
     </div>
 
     <div class="chat-container">
@@ -18,6 +18,7 @@
         <ItemList />
       </div>
     </div>
+
   </div>
 </template>
 
@@ -38,22 +39,20 @@ export default {
     Chat
   },
   data () {
-    return ({ hasProfilePhoto: null, profilePhotoUrl: null })
+    return ({
+      profilePhotoUrl: false
+    })
   },
   mounted () {
     if (!document.cookie) {
       router.push('/sign-in')
     }
-
     //see if user has profile photo and download it
-    let userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
     userProfilePhotoRef.getDownloadURL().then((url) => {
-      console.log('downloaded profile photo')
-      this.hasProfilePhoto = true
       this.profilePhotoUrl = url
     }).catch((error) => {
-      console.log(error)
-      this.hasProfilePhoto = false
+      return
     })
   }
 }
