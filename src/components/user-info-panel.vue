@@ -1,12 +1,12 @@
 <template>
-  <div class="info-wrap">
-    <div v-if="hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
-    </div>
-    <div v-if="!hasProfilePhoto" class="profile-bubble" id="profile-bubble" v-bind:style="{backgroundColor: userData.profileTheme}">
-      <span class="profile-initials">{{ userData.initials }}</span>
-    </div>
-    <input type='file' id='file-input' v-on:change="handleFiles">
+  <div class="top-wrap">
+  <div class="left-wrap">
+     Hello, {{ userData.firstName }}!
   </div>
+  <div @click="logout" class="right-wrap">
+    Logout
+  </div>
+</div>
 </template>
 
 <script>
@@ -18,27 +18,33 @@ export default {
   props: ['profilePhotoUrl'],
   data () {
     return ({
-      uid: document.cookie,
+      uid: document.cookie || '',
       userData: false
     })
   },
   methods: {
-    handleFiles (e) {
-      let image = e.target.files[0]
-      let storageRef = firebase.storage().ref()
-      let nameRef = storageRef.child(image.name)
-      let fullPathRef = storageRef.child(`profile-photos/${this.uid}`)
-      let metadata = {
-        customMetadata: {
-          'uid': `${this.uid}`
-        }
-      }
-      fullPathRef.put(image, metadata).then(function(snapshot) {
-        console.log('Uploaded image!', snapshot)
-      })
+    // handleFiles (e) {
+    //   let image = e.target.files[0]
+    //   let storageRef = firebase.storage().ref()
+    //   let nameRef = storageRef.child(image.name)
+    //   let fullPathRef = storageRef.child(`profile-photos/${this.uid}`)
+    //   let metadata = {
+    //     customMetadata: {
+    //       'uid': `${this.uid}`
+    //     }
+    //   }
+    //   fullPathRef.put(image, metadata).then(function(snapshot) {
+    //     console.log('Uploaded image!', snapshot)
+    //   })
+    // }
+    logout () {
+
+      document.cookie = ''
+      router.push('/sign-in')
     }
   },
   mounted () {
+    console.log(this.uid);
     if (!this.uid) {
       router.push('/')
     }
@@ -54,14 +60,23 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
-.info-wrap {
-  margin: 5px;
+.top-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  color: #008cc7;
+}
+.left-wrap {
+  margin: 5px;
+  display: flex;
   height: 50px;
-  border-radius: 5px;
+  align-items: center;
+  font-size: 20px;
+}
+
+.right-wrap {
+  cursor: pointer;
 }
 
 .profile-bubble {

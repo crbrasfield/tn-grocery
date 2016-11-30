@@ -89,6 +89,8 @@ export default {
   padding: 10px;
   box-shadow: 2px 10px 24px -8px rgba(0,0,0,0.55);
   background-color: #fbfbfb;
+  height: 360px;
+  overflow: scroll;
 }
 .item-wrap {
   padding: 10px;

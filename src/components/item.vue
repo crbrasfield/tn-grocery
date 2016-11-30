@@ -1,5 +1,5 @@
 <template>
-  <div class="item">
+  <div v-if="imagesLodaed" class="item">
       <div>
         <div class="header-row">
           <div class='profile-title-div'>
@@ -9,9 +9,9 @@
             <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
               <span class="profile-initials">{{ posterData.initials }}</span>
             </div>
-            <a class="item-title" target="_blank" :href="item.link" >
-              {{ item.name }}
-            </a>
+            <div class="item-title">
+              {{ item.name }} <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
+            </div>
           </div>
           <!-- Item order status -->
           <div class='status-office-div'>
@@ -49,7 +49,6 @@
             <i class="material-icons small-icon">cancel</i>
           </div>
         </div>
-{{imgUrl}}
   </div>
 </template>
 
@@ -63,7 +62,8 @@ export default {
       users: {},
       posterData: {},
       postProfilePhotoUrl: false,
-      profileImage: ''
+      profileImage: '',
+      imagesLodaed: false
     })
   },
   mounted () {
@@ -80,6 +80,7 @@ export default {
     const postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
     postedByRef.getDownloadURL().then((url) => {
       this.profileImage = url
+      this.imagesLodaed = true
     }).catch((error) => {
       return
     })
@@ -148,6 +149,7 @@ export default {
 .item-link {
   color: #00b3fe;
   cursor: pointer;
+  font-size: 12px;
 }
 .cancel-button {
   align-items: center;

@@ -20,7 +20,7 @@
       </div>
 
       <div class="mdl-textfield mdl-js-textfield input">
-        <span class="input-title">Why do you need this</span>
+        <span class="input-title">Description</span>
         <span class="required">(required)</span>
         <input class="mdl-textfield__input text-input" type="text" v-model="itemData.description">
       </div>

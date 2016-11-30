@@ -5,11 +5,6 @@
       <UserInfoPanel :profilePhotoUrl="profilePhotoUrl" />
     </div>
 
-    <div class="chat-container">
-      <Chat />
-    </div>
-    <br>
-
     <div class="item-container">
       <div class="post-container">
         <PostItem />
@@ -17,6 +12,12 @@
       <div class="list-container">
         <ItemList />
       </div>
+    </div>
+
+    <br>
+
+    <div class="chat-container">
+      <Chat />
     </div>
 
   </div>
@@ -66,8 +67,14 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 770px;
+  margin: auto;
   // flex-direction: row;
   // margin-top: 25px;
+}
+.info-container {
+  display: flex;
+  width: 100%;
 }
 .item-container {
   display: flex;
