@@ -2,7 +2,7 @@
   <div class="dashboard-wrap">
 
     <div class="info-container">
-      <UserInfoPanel :profilePhotoUrl="profilePhotoUrl" />
+      <UserInfoPanel />
     </div>
 
     <div class="item-container">
@@ -49,12 +49,12 @@ export default {
       router.push('/sign-in')
     }
     //see if user has profile photo and download it
-    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
-    userProfilePhotoRef.getDownloadURL().then((url) => {
-      this.profilePhotoUrl = url
-    }).catch((error) => {
-      return
-    })
+    // const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+    // userProfilePhotoRef.getDownloadURL().then((url) => {
+    //   this.profilePhotoUrl = url
+    // }).catch((error) => {
+    //   return
+    // })
   }
 }
 </script>

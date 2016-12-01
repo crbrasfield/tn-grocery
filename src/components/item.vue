@@ -1,23 +1,21 @@
 <template>
-  <div v-if="imagesLodaed" class="item">
+  <div class="item">
       <div>
         <div class="header-row">
           <div class='profile-title-div'>
-            <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
+            <!-- <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
               <img class="profile-image" :src="profileImage"/>
             </div>
             <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
               <span class="profile-initials">{{ posterData.initials }}</span>
-            </div>
+            </div> -->
             <div class="item-title">
               {{ item.name }} <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
             </div>
+              <span class="office-text">{{ item.office }} Office</span>
           </div>
           <!-- Item order status -->
           <div class='status-office-div'>
-            <div class="mdl-chip teale">
-              <p class="office-text">{{ item.office }} Office</p>
-            </div>
             <div  v-if="item.purchased" class="item-has-been-ordered">
               Item ordered! <span class="material-icons small-icon">check</span>
             </div>
@@ -26,8 +24,6 @@
             </div>
           </div>
         </div>
-          <br>
-          <br>
           "{{ item.description }}"
         <div class="action-row">
           <div class="like-container" >
@@ -62,8 +58,7 @@ export default {
       users: {},
       posterData: {},
       postProfilePhotoUrl: false,
-      profileImage: '',
-      imagesLodaed: false
+      profileImage: ''
     })
   },
   mounted () {
@@ -72,18 +67,18 @@ export default {
       this.users = snapshot.val()
     })
 
-    const postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
-    const postedByUserObject = this.users[postedByUserId]
-    this.posterData = postedByUserObject
-
-
-    const postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
-    postedByRef.getDownloadURL().then((url) => {
-      this.profileImage = url
-      this.imagesLodaed = true
-    }).catch((error) => {
-      return
-    })
+    // const postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
+    // const postedByUserObject = this.users[postedByUserId]
+    // this.posterData = postedByUserObject
+    //
+    //
+    // const postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+    // postedByRef.getDownloadURL().then((url) => {
+    //   this.profileImage = url
+    //   this.imagesLodaed = true
+    // }).catch((error) => {
+    //   return
+    // })
   },
   methods: {
     markAsPurchased (key) {
@@ -125,12 +120,12 @@ export default {
 .profile-title-div {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  padding-top: 5px;
+  flex-direction: column;
 }
 .status-office-div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: flex-end;
 }
 .action-row {
@@ -139,12 +134,9 @@ export default {
   margin-top: 10px;
 }
 .item-title {
-  margin: 0 10px;
   color: #8dcf3a;
   font-weight: bold;
   font-size: 20px;
-  cursor: pointer;
-  text-decoration: none;
 }
 .item-link {
   color: #00b3fe;
@@ -165,8 +157,8 @@ export default {
 }
 .office-text {
   font-size: 13px;
-  line-height: 32px;
-  color: white;
+  color: #008cc7;
+  padding-left: 5px;
 }
 .mdl-chip.teale {
   background-color: #008cc7;
@@ -234,10 +226,5 @@ export default {
   color: white;
   font-size: 14pt;
   padding: 3%;
-}
-.profile-image {
-
-  max-width: 110px;
-  max-height: 110px;
 }
 </style>
