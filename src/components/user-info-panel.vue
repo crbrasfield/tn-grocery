@@ -1,7 +1,7 @@
 <template>
   <div class="top-wrap">
   <div class="left-wrap">
-     Hello, {{ userData.firstName }}!
+     {{ this.greeting()}}
   </div>
   <div @click="logout" class="right-wrap">
     Logout
@@ -12,6 +12,7 @@
 <script>
 import { store } from '../main.js'
 import router from '../router.js'
+import moment from 'moment'
 
 export default {
   name: 'dashboard',
@@ -19,7 +20,8 @@ export default {
   data () {
     return ({
       uid: document.cookie || '',
-      userData: false
+      userData: false,
+      time: ''
     })
   },
   methods: {
@@ -38,13 +40,27 @@ export default {
     //   })
     // }
     logout () {
-
       document.cookie = ''
       router.push('/sign-in')
+    },
+    greeting () {
+      if (this.time.includes('AM')) {
+        return `Good morning, ${this.userData.firstName}!`
+      }
+      if (this.time.includes('PM')) {
+        let timeOfAfternoon = parseInt(this.time.slice(0,1))
+        if (timeOfAfternoon === 12 || (timeOfAfternoon >= 1  && timeOfAfternoon <= 5)) {
+          return `Good afternoon, ${this.userData.firstName}!`
+        } else {
+          return `Good evening, ${this.userData.firstName}!`
+        }
+      }
+
     }
   },
   mounted () {
     console.log(this.uid);
+    this.time = moment().format('LT')
     if (!this.uid) {
       router.push('/')
     }
