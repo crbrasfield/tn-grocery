@@ -1,7 +1,7 @@
 <template>
   <div class="chat-wrap">
     <div class="chat-title">
-      <span>TheraChat</span> <span class="material-icons icon">sentiment_satisfied</span>
+      <span>TheraChat</span>
     </div>
     <div id="chat-box" class="top-chat-wrap">
       <div class="chat-text" v-for="(message, key) in messages">
@@ -12,8 +12,8 @@
       <form @submit.prevent="postMesasge" class="input">
         <input type="text" v-model="message" class="input" placeholder="Send a message...">
       </form>
-      <div class="button material-icons" @click="postMesasge" >
-        present_to_all
+      <div class="" @click="postMesasge" >
+        send
       </div>
     </div>
 

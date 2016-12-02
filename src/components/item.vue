@@ -1,51 +1,60 @@
 <template>
-  <div class="">
-        <div class="">
-          <div class=''>
+  <div v-bind:class="[!item.purchased ? 'panel-primary' : 'panel-success', 'panel']">
+        <div class="panel-heading">
             <!-- <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
               <img class="profile-image" :src="profileImage"/>
             </div>
             <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
               <span class="profile-initials">{{ posterData.initials }}</span>
             </div> -->
-            <div class="">
-              {{ item.name }}
-              <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
-            </div>
-              <span class="">{{ item.office }} Office</span>
-          </div>
-          <!-- Item order status -->
-          <div class=''>
+            <div class="row">
+              <div class="col-md-8">
+                <h4>
+                  {{ item.name }}
+                  <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
+                </h4>
+              </div>
+              <div class="col-md-2">
+                <span class="">{{ item.office }}</span>
+              </div>
+          <div class='col-md-2'>
             <div  v-if="item.purchased" class="">
-              Item ordered! <span class="">check</span>
+              Ordered!
             </div>
             <div  v-if="!item.purchased" class="">
-              Order Pending
+              Pending
             </div>
           </div>
         </div>
-          "{{ item.description }}"
-        <div class="">
-          <div class="" >
-            <span class="" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
-              <span class="">{{ likeCount }}</span>
-              <i class="">thumb_up</i>
-            </span>
-            <span class="" @click="likeItem(itemKey)" v-else>
-              <span class="">{{ likeCount }}</span>
-              <i class="">thumb_up</i>
-            </span>
-          </div>
-          <div v-if="userIsAdmin() && !item.purchased" class="" @click="markAsPurchased(itemKey)">
-            Mark As purchased
-            <i class="material-icons small-icon">check</i>
-          </div>
-          <div v-if="postedByThisUser(item.postedBy)" class="" @click="deleteItem(itemKey)">
-            Cancel Request
-            <i class="">cancel</i>
-          </div>
         </div>
-  </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+              {{ item.description }}
+            </div>
+        </div>
+            <div class="panel-footer footer">
+              <div class="row">
+                <div class="col-md-6">
+                  <span class="" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
+                    <span class="">{{ likeCount }}</span>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  </span>
+                  <span class="" @click="likeItem(itemKey)" v-else>
+                    <span class="">{{ likeCount }}</span>
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                  </span>
+                </div>
+                <div class="col-md-6 right">
+                  <div v-if="userIsAdmin() && !item.purchased" class="left" @click="markAsPurchased(itemKey)">
+                    <i class="fa fa-check" aria-hidden="true"></i>Purchased
+                  </div>
+                  <div v-if="postedByThisUser(item.postedBy)" class="" @click="deleteItem(itemKey)">
+                    <i class="fa fa-times" aria-hidden="true"></i>Cancel
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
 </template>
 
 <script>
@@ -110,121 +119,21 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.item {
-  margin-bottom: 5px;
+h4 {
+  margin: 3px;
 }
-.header-row {
-  display: flex;
-  justify-content: space-between;
+.panel-heading {
+  padding-top: 1px;
+  padding-bottom: 1px;
 }
-.profile-title-div {
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 5px;
-  flex-direction: column;
+.right {
+  text-align: right;
 }
-.status-office-div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+.left {
+  float: left;
 }
-.action-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-.item-title {
-  color: #8dcf3a;
-  font-weight: bold;
-  font-size: 20px;
-}
-.item-link {
-  color: #00b3fe;
-  cursor: pointer;
-  font-size: 12px;
-}
-.cancel-button {
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  float: right;
-  font-size: 12px;
-  background-color: red;
-  color: white;
-  border-radius: 5px;
-  padding: 2px 4px 2px 6px;
-  cursor: pointer;
-}
-.office-text {
-  font-size: 13px;
-  color: #008cc7;
-  padding-left: 5px;
-}
-.mdl-chip.teale {
-  background-color: #008cc7;
-}
-.like-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  width: 50px;
-  border-radius: 5px;
-  padding: 2px;
-}
-.like-span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.like-button-text {
-  font-size: 17px;
-  margin-right: 5px;
+.footer {
   padding-top: 3px;
-}
-.liked {
-  color: #00b3fe;
-}
-.disliked {
-  color: grey;
-}
-.item-has-been-ordered {
-  color: #8dcf3a;
-}
-.item-has-not-been-ordered {
-  color: lightgrey;
-}
-.small-icon {
-  font-size: 15px;
-  padding-left: 5px;
-}
-.mark-purchased-button {
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  float: right;
-  font-size: 12px;
-  color: white;
-  border-radius: 5px;
-  padding: 2px 4px 2px 6px;
-  cursor: pointer;
-  background-color: #8dcf3a;
-}
-.profile-bubble {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-width: 3px;
-  border-style: solid;
-  overflow: hidden;
-}
-.profile-initials {
-  display: flex;
-  color: white;
-  font-size: 14pt;
-  padding: 3%;
+  padding-bottom: 3px;
 }
 </style>

@@ -70,7 +70,7 @@ export default {
 
 <style lang='scss' scoped>
 .wrap {
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
 }
 </style>

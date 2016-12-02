@@ -1,30 +1,21 @@
 <template>
   <div class="">
-    <h2 class="">
-      Posted Items
-    </h2>
-    <div class="" v-bind:class="{ active: !showFullList }" @click="showPurchasedItems">Purchased Items</div>
-    <div class="" v-bind:class="{ active: showFullList }" @click="showAllItems">All Items</div>
-    <div class="">
-      <div class="" v-if="showFullList" v-for="(item, key) in items">
-        <Item
-        :item="item"
-        :itemKey="key"
-        :hasBeenLiked="hasBeenLiked(key)"
-        :likeCount="likeCount(item.likes || 0)"
-        />
-      </div>
-      <div class="" v-if="!showFullList" v-for="(item, key) in purchasedItems">
-        <Item
-        :item="item"
-        :itemKey="key"
-        :hasBeenLiked="hasBeenLiked(key)"
-        :likeCount="likeCount(item.likes || 0)"
-        />
+
+      <!-- <ul class="nav nav-tabs">
+        <li role="presentation" v-bind:class="{ active: showFullList }"><a href="#" @click="showAllItems">All Items</a></li>
+      </ul> -->
+      <h2>Item List</h2>
+        <div v-for="(item, key) in items">
+          <Item
+          :item="item"
+          :itemKey="key"
+          :hasBeenLiked="hasBeenLiked(key)"
+          :likeCount="likeCount(item.likes || 0)"
+          />
+        </div>
       </div>
 
     </div>
-  </div>
 </template>
 
 <script>
@@ -46,8 +37,8 @@ export default {
   mounted () {
     const itemList = firebase.database().ref().child(`items`)
     itemList.on('value', (snapshot) => {
-      this.items = snapshot.val()
-      this.purchasedItems = _.pickBy(snapshot.val(), (item) => item.purchased)
+      const allItems = snapshot.val()
+      this.items = allItems
     })
   },
   methods: {
