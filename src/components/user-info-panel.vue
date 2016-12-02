@@ -1,5 +1,5 @@
 <template>
-  <div class="top-wrap">
+  <div v-if="this.userData" class="top-wrap">
   <div class="left-wrap">
      {{ this.greeting()}}
   </div>
