@@ -23,8 +23,8 @@
       </div>
     </div>
 
-    <div v-if="emailSent">
-      <h1>EMAIL SENT!<h1>
+    <div v-if="emailSent" class='email-sent'>
+      <i class="fa fa-check-circle fa-5x check" aria-hidden="true"></i><h1>EMAIL SENT!<h1>
     </div>
   </div>
 </template>
@@ -58,7 +58,8 @@ export default {
         this.delayedReRoute('/sign-in')
       })
       .catch((error) => {
-        this.errorMessage = error.message
+        console.log(error);
+        error.code === 'auth/user-not-found' ? this.errorMessage = 'Email not in use.' : this.errorMessage = error.message
       })
     },
     goToResetPassword () {
@@ -76,6 +77,10 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.email-sent {
+  color: #42b983;
 }
 
 .text-left {
