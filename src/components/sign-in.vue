@@ -21,8 +21,6 @@
       <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signUp">Sign Up</button>
       <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signIn">Sign In</button>
     </div>
-
-    <button type="button" name="button" @click="logId">Log current user ID</button>
   </div>
 </template>
 
@@ -52,10 +50,7 @@ export default {
       .catch((error) => {
         this.errorMessage = error.message
       })
-    },
-    logId () {
-      console.log(document.cookie)
-    },
+    }
   }
 }
 </script>
