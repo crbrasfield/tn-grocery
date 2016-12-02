@@ -1,44 +1,56 @@
 <template>
-  <div class="post-item-wrap">
-    <span class="main-head">
-      Post an Item!
-    </span>
-    <div class="post-item">
-      <span class="error-message">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Post an Item
+      </h3>
+    </div>
+    <div class="panel panel-body">
+
+  <div class="form-group">
+    <div class="">
+      <span class="">
         {{ errorMessage }}
       </span>
 
-      <div class="mdl-textfield mdl-js-textfield input" >
-        <span class="input-title">Title</span>
-        <span class="required">(required)</span>
-        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.name">
+      <div class="" >
+        <label class="">Title</label>
+        <label class="">(required)</label>
+        <input class="form-control" type="text" v-model="itemData.name">
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield input">
-        <span class="input-title">Link to Item</span>
-        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.link">
+      <div class="">
+        <label class="">Link to Item</label>
+        <input class="form-control" type="text" v-model="itemData.link">
       </div>
 
-      <div class="mdl-textfield mdl-js-textfield input">
-        <span class="input-title">Description</span>
-        <span class="required">(required)</span>
-        <input class="mdl-textfield__input text-input" type="text" v-model="itemData.description">
+      <div class="">
+        <label class="i">Description</label>
+        <label class="">(required)</label>
+        <input class="form-control" type="text" v-model="itemData.description">
       </div>
-      <div class="radio-buttons">
-        <span class="input-title">Office</span>
-        <label class='radio-label'>
+
+      <label class="">Office</label>
+      <div class="radio">
+        <label class=''>
           <input type="radio" value="Main" v-model="itemData.office">Main
         </label>
-        <label class='radio-label'>
+      </div>
+      <div class="radio">
+        <label class=''>
           <input type="radio" value="Dev" v-model="itemData.office">Dev
         </label>
       </div>
-      <br>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect button" @click="postItem">
+
+      <button class="btn btn-primary" @click="postItem">
         Post
       </button>
+
     </div>
   </div>
+</div>
+
+</div>
 </template>
 
 <script>
