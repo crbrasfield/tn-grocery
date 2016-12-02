@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="[!item.purchased ? 'panel-primary' : 'panel-success', 'panel']">
+  <div v-bind:class="[!item.purchased ? 'panel-info' : 'panel-success', 'panel']">
         <div class="panel-heading">
             <!-- <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
               <img class="profile-image" :src="profileImage"/>

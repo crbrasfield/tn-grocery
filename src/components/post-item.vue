@@ -1,8 +1,13 @@
 <template>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        Post an Item
+      </h3>
+    </div>
+    <div class="panel panel-body">
+
   <div class="form-group">
-    <h2 class="">
-      Post an Item!
-    </h2>
     <div class="">
       <span class="">
         {{ errorMessage }}
@@ -40,9 +45,12 @@
       <button class="btn btn-primary" @click="postItem">
         Post
       </button>
-      
+
     </div>
   </div>
+</div>
+
+</div>
 </template>
 
 <script>
