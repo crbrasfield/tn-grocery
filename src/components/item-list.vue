@@ -1,12 +1,12 @@
 <template>
-  <div class="item-list-wrap">
-    <span class="main-head">
+  <div class="">
+    <h2 class="">
       Posted Items
-    </span>
-    <div class="list-type-button" v-bind:class="{ active: !showFullList }" @click="showPurchasedItems">Purchased Items</div>
-    <div class="list-type-button" v-bind:class="{ active: showFullList }" @click="showAllItems">All Items</div>
-    <div class="mdl-card item-list">
-      <div class="item-wrap" v-if="showFullList" v-for="(item, key) in items">
+    </h2>
+    <div class="" v-bind:class="{ active: !showFullList }" @click="showPurchasedItems">Purchased Items</div>
+    <div class="" v-bind:class="{ active: showFullList }" @click="showAllItems">All Items</div>
+    <div class="">
+      <div class="" v-if="showFullList" v-for="(item, key) in items">
         <Item
         :item="item"
         :itemKey="key"
@@ -14,7 +14,7 @@
         :likeCount="likeCount(item.likes || 0)"
         />
       </div>
-      <div class="item-wrap" v-if="!showFullList" v-for="(item, key) in purchasedItems">
+      <div class="" v-if="!showFullList" v-for="(item, key) in purchasedItems">
         <Item
         :item="item"
         :itemKey="key"

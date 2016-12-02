@@ -1,48 +1,48 @@
 <template>
-  <div class="item">
-      <div>
-        <div class="header-row">
-          <div class='profile-title-div'>
+  <div class="">
+        <div class="">
+          <div class=''>
             <!-- <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
               <img class="profile-image" :src="profileImage"/>
             </div>
             <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
               <span class="profile-initials">{{ posterData.initials }}</span>
             </div> -->
-            <div class="item-title">
-              {{ item.name }} <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
+            <div class="">
+              {{ item.name }}
+              <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
             </div>
-              <span class="office-text">{{ item.office }} Office</span>
+              <span class="">{{ item.office }} Office</span>
           </div>
           <!-- Item order status -->
-          <div class='status-office-div'>
-            <div  v-if="item.purchased" class="item-has-been-ordered">
-              Item ordered! <span class="material-icons small-icon">check</span>
+          <div class=''>
+            <div  v-if="item.purchased" class="">
+              Item ordered! <span class="">check</span>
             </div>
-            <div  v-if="!item.purchased" class="item-has-not-been-ordered">
+            <div  v-if="!item.purchased" class="">
               Order Pending
             </div>
           </div>
         </div>
           "{{ item.description }}"
-        <div class="action-row">
-          <div class="like-container" >
-            <span class="like-span" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
-              <span class="like-button-text liked">{{ likeCount }}</span>
-              <i class="material-icons icon liked">thumb_up</i>
+        <div class="">
+          <div class="" >
+            <span class="" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
+              <span class="">{{ likeCount }}</span>
+              <i class="">thumb_up</i>
             </span>
-            <span class="like-span" @click="likeItem(itemKey)" v-else>
-              <span class="like-button-text disliked">{{ likeCount }}</span>
-              <i class="material-icons icon disliked">thumb_up</i>
+            <span class="" @click="likeItem(itemKey)" v-else>
+              <span class="">{{ likeCount }}</span>
+              <i class="">thumb_up</i>
             </span>
           </div>
-          <div v-if="userIsAdmin() && !item.purchased" class="mark-purchased-button" @click="markAsPurchased(itemKey)">
+          <div v-if="userIsAdmin() && !item.purchased" class="" @click="markAsPurchased(itemKey)">
             Mark As purchased
             <i class="material-icons small-icon">check</i>
           </div>
-          <div v-if="postedByThisUser(item.postedBy)" class="cancel-button" @click="deleteItem(itemKey)">
+          <div v-if="postedByThisUser(item.postedBy)" class="" @click="deleteItem(itemKey)">
             Cancel Request
-            <i class="material-icons small-icon">cancel</i>
+            <i class="">cancel</i>
           </div>
         </div>
   </div>

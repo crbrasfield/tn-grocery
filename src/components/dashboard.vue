@@ -1,25 +1,34 @@
 <template>
-  <div class="dashboard-wrap">
+  <div class="wrap">
 
-    <div class="info-container">
+
+  <div class="row">
+
+    <div class="col-md-12">
       <UserInfoPanel />
     </div>
 
-    <div class="item-container">
-      <div class="post-container">
-        <PostItem />
-      </div>
-      <div class="list-container">
-        <ItemList />
-      </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-6">
+      <PostItem />
     </div>
 
-    <br>
-
-    <div class="chat-container">
-      <Chat />
+    <div class="col-md-6">
+      <ItemList />
     </div>
 
+  </div>
+
+  <div class="row">
+
+  <div class="col-md-12">
+    <Chat />
+  </div>
+
+  </div>
   </div>
 </template>
 
@@ -60,33 +69,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.dashboard-wrap {
-  // margin: auto;
-  // max-width: 1200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 770px;
+.wrap {
+  max-width: 800px;
   margin: auto;
-  // flex-direction: row;
-  // margin-top: 25px;
-}
-.info-container {
-  display: flex;
-  width: 100%;
-}
-.item-container {
-  display: flex;
-  // align-items: center;
-}
-.post-container {
-
-}
-.list-container {
-
-}
-.chat-container {
-
 }
 </style>
