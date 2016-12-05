@@ -21,6 +21,10 @@
       <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signUp">Sign Up</button>
       <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signIn">Sign In</button>
     </div>
+    <div class='reset-password'>
+      <p>Can't remember your password?</p>
+      <router-link to="reset-password"> Reset your password.</p>
+    </div>
   </div>
 </template>
 
@@ -50,6 +54,9 @@ export default {
       .catch((error) => {
         this.errorMessage = error.message
       })
+    },
+    goToResetPassword () {
+      router.push({path: '/reset-password'})
     }
   }
 }
@@ -104,6 +111,13 @@ export default {
 
 .success-message {
   color: green;
+}
+
+.reset-password {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 h1, h2 {
