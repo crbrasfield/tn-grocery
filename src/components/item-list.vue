@@ -1,8 +1,5 @@
 <template>
   <div class="panel panel-primary">
-      <!-- <ul class="nav nav-tabs">
-        <li role="presentation" v-bind:class="{ active: showFullList }"><a href="#" @click="showAllItems">All Items</a></li>
-      </ul> -->
       <div class="panel-heading">
         <h3 class="panel-title">
           Item List

@@ -31,6 +31,7 @@
       </div>
 
       <div class="office">
+        <div class="office-left">
         <label class="">Office</label>
         <div class="office-input-wrap">
           <div class="radio">
@@ -45,10 +46,12 @@
           </div>
         </div>
       </div>
-
-      <button class="btn btn-primary" @click="postItem">
-        Post
-      </button>
+      <div class="office-right">
+        <button class="btn btn-primary post" @click="postItem">
+          Post
+        </button>
+      </div>
+      </div>
 
     </div>
   </div>
@@ -127,7 +130,6 @@ export default {
   border-top: 1px solid whitesmoke;
   border-left: 1px solid whitesmoke;
   border-right: 1px solid whitesmoke;
-
 }
 .error-message {
   color: red;
@@ -158,7 +160,10 @@ export default {
 }
 
 .office {
-  padding-top: 10px;
+  padding-top: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .office-input-wrap {
@@ -169,6 +174,10 @@ export default {
 .radio {
   margin: 0;
   margin-right: 10px;
+}
+
+.post {
+  float: right;
 }
 
 </style>

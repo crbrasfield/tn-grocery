@@ -14,10 +14,10 @@
                   <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
                 </h4>
               </div>
-              <div class="col-md-2">
-                <span class="">{{ item.office }}</span>
+              <div class="col-md-2 office">
+                <i class="fa fa-map-marker" aria-hidden="true"></i> <span class="">{{ item.office }}</span>
               </div>
-          <div class='col-md-2'>
+          <div class='col-md-2 status'>
             <div  v-if="item.purchased" class="">
               Ordered!
             </div>
@@ -35,21 +35,21 @@
             <div class="panel-footer footer">
               <div class="row">
                 <div class="col-md-6">
-                  <span class="" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
-                    <span class="">{{ likeCount }}</span>
-                    <i class="fa fa-star" aria-hidden="true"></i>
+                  <span class="pointer" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
+                    <span class="pointer">{{ likeCount }}</span>
+                    <i class="fa fa-star liked" aria-hidden="true"></i>
                   </span>
-                  <span class="" @click="likeItem(itemKey)" v-else>
-                    <span class="">{{ likeCount }}</span>
+                  <span class="pointer" @click="likeItem(itemKey)" v-else>
+                    <span class="pointer">{{ likeCount }}</span>
                     <i class="fa fa-star-o" aria-hidden="true"></i>
                   </span>
                 </div>
                 <div class="col-md-6 right">
-                  <div v-if="userIsAdmin() && !item.purchased" class="left" @click="markAsPurchased(itemKey)">
+                  <div v-if="userIsAdmin() && !item.purchased" class="left pointer" @click="markAsPurchased(itemKey)">
                     <i class="fa fa-check" aria-hidden="true"></i>Purchased
                   </div>
-                  <div v-if="postedByThisUser(item.postedBy)" class="" @click="deleteItem(itemKey)">
-                    <i class="fa fa-times" aria-hidden="true"></i>Cancel
+                  <div v-if="postedByThisUser(item.postedBy)" class="pointer" @click="deleteItem(itemKey)">
+                    <i class="fa fa-times cancel" aria-hidden="true"></i>Cancel
                   </div>
                 </div>
               </div>
@@ -135,5 +135,24 @@ h4 {
 .footer {
   padding-top: 3px;
   padding-bottom: 3px;
+}
+.liked {
+  color: #337ab7;
+}
+.cancel {
+  color: red;
+  padding-right: 2px;
+  cursor: pointer;
+}
+.status {
+  padding-top: 2px;
+  text-align: right;
+}
+.office {
+  padding-top: 2px;
+  text-align: center;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>
