@@ -46,6 +46,7 @@ export default {
       router.push({path: 'sign-up'})
     },
     signIn () {
+      console.log('hello');
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then((res) => {
         document.cookie = res.uid

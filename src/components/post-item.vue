@@ -25,21 +25,25 @@
       </div>
 
       <div class="">
-        <label class="i">Description</label>
+        <label class="">Description</label>
         <label class="">(required)</label>
         <input class="form-control" type="text" v-model="itemData.description">
       </div>
 
-      <label class="">Office</label>
-      <div class="radio">
-        <label class=''>
-          <input type="radio" value="Main" v-model="itemData.office">Main
-        </label>
-      </div>
-      <div class="radio">
-        <label class=''>
-          <input type="radio" value="Dev" v-model="itemData.office">Dev
-        </label>
+      <div class="office">
+        <label class="">Office</label>
+        <div class="office-input-wrap">
+          <div class="radio">
+            <label class=''>
+              <input type="radio" value="Main" v-model="itemData.office">Main
+            </label>
+          </div>
+          <div class="radio">
+            <label class=''>
+              <input type="radio" value="Dev" v-model="itemData.office">Dev
+            </label>
+          </div>
+        </div>
       </div>
 
       <button class="btn btn-primary" @click="postItem">
@@ -151,6 +155,20 @@ export default {
 .button {
   background-color: #008cc7;
   color: white;
+}
+
+.office {
+  padding-top: 10px;
+}
+
+.office-input-wrap {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.radio {
+  margin: 0;
+  margin-right: 10px;
 }
 
 </style>
