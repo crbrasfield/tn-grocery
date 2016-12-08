@@ -41,22 +41,10 @@ export default {
     ItemList,
     Chat
   },
-  data () {
-    return ({
-      profilePhotoUrl: false
-    })
-  },
   mounted () {
     if (!document.cookie) {
       router.push('/sign-in')
     }
-    //see if user has profile photo and download it
-    // const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
-    // userProfilePhotoRef.getDownloadURL().then((url) => {
-    //   this.profilePhotoUrl = url
-    // }).catch((error) => {
-    //   return
-    // })
   }
 }
 </script>
