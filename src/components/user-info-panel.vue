@@ -1,12 +1,35 @@
 <template>
   <div v-if="this.userData" class="top-wrap">
-  <div class="left-wrap">
-     {{ this.greeting()}}
+    <div class="left-wrap">
+       {{this.greeting()}}
+    </div>
+    <div class='right-wrap'>
+      <div class="profile-div">
+
+        <input v-if='showUpload' type="file" @change="uploadPhoto">
+
+        <div
+          v-if="this.profilePhotoUrl === null"
+          class='profile-bubble'
+          v-bind:style="styles"
+          v-on:click="showUpload = !showUpload"
+        >
+        {{userData.initials}}
+        </div>
+
+        <div
+          v-if="this.profilePhotoUrl !== null"
+          v-bind:style="profilePhoto"
+          class='profile-bubble'
+          v-on:click="showUpload = !showUpload"
+        >
+        <i v-if="showUpload" class='fa fa-times' />
+        </div>
+
+      </div>
+      <div @click="logout" class="logout">Logout</div>
+    </div>
   </div>
-  <div @click="logout" class="right-wrap">
-    Logout
-  </div>
-</div>
 </template>
 
 <script>
@@ -16,29 +39,42 @@ import moment from 'moment'
 
 export default {
   name: 'dashboard',
-  props: ['profilePhotoUrl'],
   data () {
     return ({
       uid: document.cookie || '',
       userData: false,
-      time: ''
+      time: '',
+      profilePhotoUrl: null,
+      showUpload: false
     })
   },
+  computed: {
+    styles: function() {
+      return {
+        'background-color': this.userData.profileTheme
+      }
+    },
+    themeColor: function() {
+      return {
+        'color': this.userData.profileTheme
+      }
+    },
+    profilePhoto: function() {
+      return {
+        'background-image': `url(${this.profilePhotoUrl})`,
+
+      }
+    }
+  },
   methods: {
-    // handleFiles (e) {
-    //   let image = e.target.files[0]
-    //   let storageRef = firebase.storage().ref()
-    //   let nameRef = storageRef.child(image.name)
-    //   let fullPathRef = storageRef.child(`profile-photos/${this.uid}`)
-    //   let metadata = {
-    //     customMetadata: {
-    //       'uid': `${this.uid}`
-    //     }
-    //   }
-    //   fullPathRef.put(image, metadata).then(function(snapshot) {
-    //     console.log('Uploaded image!', snapshot)
-    //   })
-    // }
+    uploadPhoto (e) {
+      let file = e.target.files[0]
+      let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+      let metadata = {customMetadata: {'uid': `${this.uid}`}}
+      storageRef.put(file, metadata).then(function(snapshot){
+        console.log('UPLOADED');
+      }).catch(function(error){console.log(error)})
+    },
     logout () {
       document.cookie = ''
       router.push('/sign-in')
@@ -58,19 +94,29 @@ export default {
 
     }
   },
+  created () {
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      console.log('successful download');
+      this.profilePhotoUrl = url
+    }).catch((error) => {
+      console.log('FAILED download');
+      this.profilePhotoUrl = null
+      return
+    })
+  },
   mounted () {
-    console.log(this.uid);
-    this.time = moment().format('LT')
+    console.log(this.uid, this.profilePhotoUrl);
     if (!this.uid) {
       router.push('/')
     }
+    this.time = moment().format('LT')
+
     const userInfo = firebase.database().ref(`users/${this.uid}`)
     userInfo.on('value', (snapshot) => {
+      console.log('userData grabbed', snapshot.val());
       this.userData = snapshot.val()
     })
-    if (this.profilePhoto) {
-      document.getElementById("profile-bubble").style.backgroundImage=`url(${this.profilePhotoUrl})`
-    }
   }
 }
 </script>
@@ -92,7 +138,18 @@ export default {
 }
 
 .right-wrap {
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100px;
+}
+
+.profile-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .profile-bubble {
@@ -100,18 +157,28 @@ export default {
   width: 45px;
   border-radius: 50%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background-repeat: none;
   background-position: center;
   background-size: cover;
-}
-
-.profile-initials {
-  display: flex;
   color: white;
   font-size: 14pt;
   padding: 3%;
+  cursor: pointer;
 }
 
+.logout {
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: 10px;
+}
+
+.logout:hover {
+  text-decoration: underline;
+}
+
+.upload-text {
+  margin-right: 5px;
+}
 </style>
