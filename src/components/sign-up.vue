@@ -24,14 +24,14 @@
               <span class="input-group-addon" id="basic-addon1">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
               </span>
-              <input class="form-control" type="password" id="firstName" placeholder="First Name" v-model="firstName">
+              <input class="form-control" type="text" id="firstName" placeholder="First Name" v-model="firstName">
             </div>
             <br>
             <div class="input-group input">
               <span class="input-group-addon" id="basic-addon1">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>
               </span>
-              <input class="form-control" type="password" id="lastName" placeholder="Last Name" v-model="lastName">
+              <input class="form-control" type="text" id="lastName" placeholder="Last Name" v-model="lastName">
             </div>
           </div>
 
@@ -73,9 +73,12 @@ export default {
   },
   methods: {
     register () {
+      if (!this.firstName || !this.lastName) {
+        this.errorMessage = 'Please give us your name... for science.'
+        return
+      }
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        console.log('HERE!')
           this.createUserDataOnDatabase(res)
           this.successMessage = 'Account created!'
           this.errorMessage = ''
