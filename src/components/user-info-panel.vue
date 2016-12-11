@@ -1,34 +1,43 @@
 <template>
+  <div>
   <div v-if="this.userData" class="top-wrap">
     <div class="left-wrap">
        {{this.greeting()}}
     </div>
     <div class='right-wrap'>
-      <div class="profile-div">
 
-        <input v-if='showUpload' type="file" @change="uploadPhoto">
+        <!-- file upload input -->
+        <div v-if='showUpload' class='profile-upload-actions'>
+          <label class='btn btn-primary'>
+            Upload Image<input type="file" @change="uploadPhoto" style="display: none;">
+          </label>
+          <button class="btn btn-danger" @click="closeUpload">Cancel</button>
+        </div>
 
+        <!-- Empty Profile Photo -->
         <div
           v-if="this.profilePhotoUrl === null"
           class='profile-bubble'
-          v-bind:style="styles"
+          v-bind:style="emptyProfileBubble"
           v-on:click="showUpload = !showUpload"
         >
         {{userData.initials}}
         </div>
-
+        <!-- Has Profile Photo -->
         <div
           v-if="this.profilePhotoUrl !== null"
           v-bind:style="profilePhoto"
           class='profile-bubble'
           v-on:click="showUpload = !showUpload"
         >
-        <i v-if="showUpload" class='fa fa-times' />
         </div>
 
-      </div>
-      <div @click="logout" class="logout">Logout</div>
+      <!-- <div @click="logout" class="logout">Logout</div> -->
     </div>
+  </div>
+  <div class="bottom-wrap">
+    <div @click="logout" class="logout">Logout</div>
+  </div>
   </div>
 </template>
 
@@ -49,7 +58,7 @@ export default {
     })
   },
   computed: {
-    styles: function() {
+    emptyProfileBubble: function() {
       return {
         'background-color': this.userData.profileTheme
       }
@@ -62,6 +71,7 @@ export default {
     profilePhoto: function() {
       return {
         'background-image': `url(${this.profilePhotoUrl})`,
+        'border': `2px solid ${this.userData.profileTheme}`
 
       }
     }
@@ -73,7 +83,11 @@ export default {
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
         console.log('UPLOADED');
+        this.$forceUpdate()
       }).catch(function(error){console.log(error)})
+    },
+    closeUpload () {
+      this.showUpload = false
     },
     logout () {
       document.cookie = ''
@@ -117,6 +131,9 @@ export default {
       console.log('userData grabbed', snapshot.val());
       this.userData = snapshot.val()
     })
+  },
+  updated () {
+    console.log('update!!')
   }
 }
 </script>
@@ -129,20 +146,30 @@ export default {
   width: 100%;
   color: #008cc7;
 }
+
+.bottom-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .left-wrap {
   margin: 5px;
   display: flex;
+  flex: 1;
   height: 50px;
-  align-items: center;
+  align-items: flex-end;
   font-size: 20px;
 }
 
 .right-wrap {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  height: 100px;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 50px;
 }
 
 .profile-div {
@@ -168,10 +195,13 @@ export default {
   cursor: pointer;
 }
 
+.profile-upload-actions {
+  margin-right: 5%;
+}
+
 .logout {
   cursor: pointer;
-  align-self: flex-end;
-  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .logout:hover {
