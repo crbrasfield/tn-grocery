@@ -78,12 +78,12 @@ export default {
   },
   methods: {
     uploadPhoto (e) {
+
       let file = e.target.files[0]
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
         console.log('UPLOADED');
-        this.$forceUpdate()
       }).catch(function(error){console.log(error)})
     },
     closeUpload () {
