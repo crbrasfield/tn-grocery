@@ -1,41 +1,70 @@
 <template>
-  <div id="sign-up">
-    <h1>Sign Up</h1>
-
-    <div class="flex-input-container">
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        email
-        <input class="mdl-textfield__input" type="text" id="email" v-model="email">
-      </div>
-
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        password
-        <input class="mdl-textfield__input" type="password" id="password" v-model="password">
-      </div>
-
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        first name
-        <input class="mdl-textfield__input" type="firstName" id="firstName" v-model="firstName">
-      </div>
-
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        last name
-        <input class="mdl-textfield__input" type="lastName" id="lastName" v-model="lastName">
+  <div class="container">
+    <div class="side-note">
+      <h2>Before you sign up!</h2>
+      <p>Hi everyone! In case you are still wondering, this is a small side project developed by Chase and Eric
+      as an OKR for each of us to become better developers as well as give you all what we hope will prove to be
+      a useful tool for the internal employees.</p>
+      <p>Do keep in mind that this is a work in progress, and anything weird that you see is probably
+      us trying to make you laugh!</p>
+      <div class="logo-quote">
+        <p>Thank you for checking this project out and we hope you enjoy it!</p>
+        <img class="img-small" src="https://images.g2crowd.com/uploads/product/image/1473786466/theranest-mental-health.png" alt="">
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="wrap">
+          <div class="">
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="text" id="email" placeholder="Email" v-model="email">
+            </div>
+            <br>
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-key" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="password" id="password" placeholder="Password" v-model="password">
+            </div>
+            <br>
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="text" id="firstName" placeholder="First Name" v-model="firstName">
+            </div>
+            <br>
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="text" id="lastName" placeholder="Last Name" v-model="lastName">
+            </div>
+          </div>
 
-    <div class="flex-button-container">
-      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="backButton" @click="back">Back</button>
-      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="registerButton" @click="register">Sign Up</button>
-    </div>
+          <div class="error-message">
+            {{errorMessage}}
+          </div>
 
-    <div class="success-message">
-      {{ successMessage }}
-    </div>
-    <div class="error-message">
-      {{errorMessage}}
+          <div class="buttons">
+            <button type="button" class="btn btn-primary button" name="signInButton" @click="back">
+              Back
+            </button>
+            <button type="button" class="btn btn-primary button" name="signInButton" @click="register">
+              Create
+            </button>
+          </div>
+          <div class='extra-links'>
+            <router-link to="reset-password">Reset your password</router-link>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -54,9 +83,12 @@ export default {
   },
   methods: {
     register () {
+      if (!this.firstName || !this.lastName) {
+        this.errorMessage = 'Please give us your name... for science.'
+        return
+      }
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
       .then((res) => {
-        console.log('HERE!')
           this.createUserDataOnDatabase(res)
           this.successMessage = 'Account created!'
           this.errorMessage = ''
@@ -97,71 +129,68 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-#sign-up {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.side-note {
+  // background-color: red;
+  height: 100px;
+  width: 500px;
+  padding-right: 20px;
+  margin-top: -200px;
+}
+.img {
+  margin: 20px;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  width: 75%;
 }
-
-.text-left {
-  text-align: left;
+.img-small {
+  width: 8%;
+  padding-bottom: 15px;
 }
-
-.flex-input-container {
+.container {
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 90vh;
+}
+.wrap {
+  display: flex;
+  padding-top: 20px;
+  margin: auto;
+  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 300px;
 }
-
-.flex-button-container {
+.buttons {
   display: flex;
-  justify-content: center;
   flex-direction: row;
   align-items: center;
 }
-
-.container {
-  width: 1000px;
-  margin: auto;
-  border-left: 2px solid #2c3e50;
-  min-height: 200px;
-  text-align: left;
-  padding-left: 50px;
-}
-
 .button {
+  width: 140px;
   margin: 10px;
-  background-color: #9dc641;
-  color: white;
+  background-color: #85c53b;
+  border: none;
 }
-
 .error-message {
   color: red;
+  margin-top: 10px;
+  font-weight: bold;
 }
-
-.success-message {
-  color: green;
+.extra-links {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
-
-h1, h2 {
-  font-weight: normal;
+.logo-quote {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 20px;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+.icon {
+  margin-left: 5px;
+  font-size: 15px;
 }
 </style>

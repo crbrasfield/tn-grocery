@@ -1,31 +1,48 @@
 <template>
-  <div id="sign-in">
-    <h1>Sign In</h1>
-    <div class="flex-input-container">
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        email
-        <input class="mdl-textfield__input" type="text" id="emai;" v-model="email">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="wrap">
+          <img class="img" src="http://vignette4.wikia.nocookie.net/mountaindew/images/2/20/CANDIDEW.png/revision/latest?cb=20120223231746" alt="">
+          <div class="">
+
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="text" id="email" placeholder="awesome@theranest.com" v-model="email">
+            </div>
+            <br>
+            <div class="input-group input">
+              <span class="input-group-addon" id="basic-addon1">
+                <i class="fa fa-key" aria-hidden="true"></i>
+              </span>
+              <input class="form-control" type="password" id="password" placeholder="Password" v-model="password">
+            </div>
+          </div>
+
+          <div class="error-message">
+            {{errorMessage}}
+          </div>
+
+          <div class="buttons">
+            <button type="button" class="btn btn-primary button" name="signInButton" @click="signUp">
+              Sign Up
+            </button>
+            <button type="button" class="btn btn-primary button" name="signInButton" @click="signIn">
+              Sign In
+              <i class="fa fa-sign-in icon" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class='extra-links'>
+            <router-link to="reset-password">Reset your password</router-link>
+          </div>
+        </div>
       </div>
-
-      <div class="mdl-textfield mdl-js-textfield text-left">
-        password
-        <input class="mdl-textfield__input" type="password" id="password" v-model="password">
-      </div>
-    </div>
-
-    <div class="error-message">
-      {{errorMessage}}
-    </div>
-
-    <div class="flex-button-container">
-      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signUp">Sign Up</button>
-      <button class="button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="button" name="signInButton" @click="signIn">Sign In</button>
-    </div>
-    <div class='reset-password'>
-      <p>Can't remember your password?</p>
-      <router-link to="reset-password"> Reset your password.</p>
     </div>
   </div>
+
+
 </template>
 
 <script>
@@ -46,7 +63,6 @@ export default {
       router.push({path: 'sign-up'})
     },
     signIn () {
-      console.log('hello');
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
       .then((res) => {
         document.cookie = res.uid
@@ -64,78 +80,52 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-#sign-in {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.img {
+  margin: 10px;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
-
-.text-left {
-  text-align: left;
-}
-
-.flex-input-container {
+.container {
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 90vh;
+}
+.wrap {
+  display: flex;
+  padding-top: 20px;
+  margin: auto;
+  display: flex;
   flex-direction: column;
   align-items: center;
+  width: 300px;
 }
-
-.flex-button-container {
+.buttons {
   display: flex;
-  justify-content: center;
   flex-direction: row;
   align-items: center;
 }
-
-.container {
-  width: 1000px;
-  margin: auto;
-  border-left: 2px solid #2c3e50;
-  min-height: 200px;
-  text-align: left;
-  padding-left: 50px;
-}
-
 .button {
+  width: 140px;
   margin: 10px;
-  background-color: #9dc641;
-  color: white;
+  background-color: #85c53b;
+  border: none;
 }
-
 .error-message {
   color: red;
+  margin-top: 10px;
+  font-weight: bold;
 }
-
-.success-message {
-  color: green;
-}
-
-.reset-password {
+.extra-links {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
 }
+.input {
 
-h1, h2 {
-  font-weight: normal;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+.icon {
+  margin-left: 5px;
+  font-size: 15px;
 }
 </style>
