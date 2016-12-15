@@ -6,6 +6,14 @@
         </h3>
       </div>
         <div class="panel-body">
+        <div v-if="!items" class="empty-items">
+          <h4>
+            Dori is dying to buy something.
+          </h4>
+          <h4>
+            Help her out and request an item!
+          </h4>
+        </div>
         <div v-for="(item, key) in items">
           <Item
           :item="item"
@@ -71,5 +79,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-
+.empty-items {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: grey;
+}
 </style>

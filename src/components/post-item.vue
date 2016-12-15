@@ -21,6 +21,7 @@
 
       <div class="">
         <label class="">Link to Item</label>
+        <label class="">(preferred)</label>
         <input class="form-control" type="text" v-model="itemData.link">
       </div>
 
@@ -62,6 +63,8 @@
 
 <script>
 import moment from 'moment'
+import _ from 'lodash'
+import { linkPreview } from '../link-preview.js'
 export default {
   name: 'post-item',
   data () {
@@ -81,6 +84,7 @@ export default {
         this.errorMessage = 'Ya left something blank, dingus!'
         return
       }
+      console.log(this.formatLink(this.itemData.link));
       firebase.database().ref().child('items').push({
         name: this.itemData.name,
         link: this.formatLink(this.itemData.link),
@@ -99,6 +103,10 @@ export default {
     },
     formatLink (link) {
       const prefix = 'http://'
+      if (_.trim(link) === '') {
+        console.log('hello');
+        return ''
+      }
       if (link.substr(0, prefix.length) !== prefix) {
         return prefix + link
       } else return

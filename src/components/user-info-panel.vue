@@ -83,7 +83,7 @@ export default {
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
-        console.log('UPLOADED');
+        // console.log('UPLOADED');
       }).catch(function(error){console.log(error)})
     },
     closeUpload () {
@@ -111,16 +111,16 @@ export default {
   created () {
     const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
     userProfilePhotoRef.getDownloadURL().then((url) => {
-      console.log('successful download');
+      // console.log('successful download');
       this.profilePhotoUrl = url
     }).catch((error) => {
-      console.log('FAILED download');
+      // console.log('FAILED download');
       this.profilePhotoUrl = null
       return
     })
   },
   mounted () {
-    console.log(this.uid, this.profilePhotoUrl);
+    // console.log(this.uid, this.profilePhotoUrl);
     if (!this.uid) {
       router.push('/')
     }
@@ -128,12 +128,12 @@ export default {
 
     const userInfo = firebase.database().ref(`users/${this.uid}`)
     userInfo.on('value', (snapshot) => {
-      console.log('userData grabbed', snapshot.val());
+      // console.log('userData grabbed', snapshot.val());
       this.userData = snapshot.val()
     })
   },
   updated () {
-    console.log('update!!')
+    // console.log('update!!')
   }
 }
 </script>

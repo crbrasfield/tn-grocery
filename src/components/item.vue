@@ -11,7 +11,7 @@
               <div class="col-md-8">
                 <h4>
                   {{ item.name }}
-                  <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a>
+                  <!-- <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a> -->
                 </h4>
               </div>
               <div class="col-md-2 office">
@@ -28,9 +28,16 @@
         </div>
         </div>
         <div class="panel-body">
-            <div class="col-md-12">
-              {{ item.description }}
-            </div>
+          <div v-if="item.link && !linkDataReady()" class="">
+            <i class="spinner fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          </div>
+          <div v-if="item.link && linkDataReady()" class="col-md-12">
+            <LinkPreview :item-data="linkData" />
+            <br>
+          </div>
+          <div class="col-md-12">
+            {{ item.description }}
+          </div>
         </div>
             <div class="panel-footer footer">
               <div class="row">
@@ -58,19 +65,27 @@
 </template>
 
 <script>
+import { linkPreview } from '../link-preview.js'
+import LinkPreview from './link-preview.vue'
 export default {
   name: 'item',
   props: ['item', 'itemKey', 'hasBeenLiked', 'likeCount'],
+  components: {
+    LinkPreview
+  },
   data () {
     return ({
       itemData: {},
       users: {},
       posterData: {},
       postProfilePhotoUrl: false,
-      profileImage: ''
+      profileImage: '',
+      linkData: null
     })
   },
   mounted () {
+    this.generateLinkPreview(this.item.link)
+
     const users = firebase.database().ref().child(`users`)
     users.on('value', (snapshot) => {
       this.users = snapshot.val()
@@ -90,6 +105,15 @@ export default {
     // })
   },
   methods: {
+    generateLinkPreview (itemLink) {
+      linkPreview(itemLink).then((res) => {
+        console.log(res.body);
+        this.linkData = res.body
+      })
+    },
+    linkDataReady () {
+      return this.linkData ? true : false
+    },
     markAsPurchased (key) {
       firebase.database().ref(`items/${key}`).update({purchased: true})
     },
@@ -126,6 +150,9 @@ h4 {
   padding-top: 1px;
   padding-bottom: 1px;
 }
+.panel-body {
+  padding-left: 0;
+}
 .right {
   text-align: right;
 }
@@ -154,5 +181,9 @@ h4 {
 }
 .pointer {
   cursor: pointer;
+}
+.spinner {
+  font-size: 20px;
+  float: right;
 }
 </style>
