@@ -2,7 +2,7 @@
   <a :href="itemData.url">
     <div class="wrapper">
       <img class="thumbnail-image":src="itemData.image || 'http://www.freeiconspng.com/uploads/no-image-icon-23.jpg' " alt="">
-      {{ itemData.title }}
+      {{ itemData.title || 'Title not found' }}
     </div>
   </a>
 </template>

@@ -102,14 +102,14 @@ export default {
       })
     },
     formatLink (link) {
-      const prefix = 'http://'
+      const prefix = 'http'
+      console.log(link.substr(0, prefix.length))
       if (_.trim(link) === '') {
-        console.log('hello');
         return ''
       }
       if (link.substr(0, prefix.length) !== prefix) {
-        return prefix + link
-      } else return
+        return 'http://' + link
+      } else return link
     }
   }
 }
