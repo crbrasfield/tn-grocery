@@ -9,8 +9,9 @@
         <!-- file upload input -->
         <div v-if='showUpload' class='profile-upload-actions'>
           <label class='btn btn-primary'>
-            Upload Image<input type="file" @change="uploadPhoto" style="display: none;">
+            Upload Profile Photo<input type="file" @change="uploadPhoto" style="display: none;">
           </label>
+          <button v-if='profilePhotoUrl !== null' class="btn btn-warning" @click="removeProfilePhoto">Remove Profile Photo</button>
           <button class="btn btn-danger" @click="closeUpload">Cancel</button>
         </div>
 
@@ -31,8 +32,6 @@
           v-on:click="showUpload = !showUpload"
         >
         </div>
-
-      <!-- <div @click="logout" class="logout">Logout</div> -->
     </div>
   </div>
   <div class="bottom-wrap">
@@ -78,13 +77,18 @@ export default {
   },
   methods: {
     uploadPhoto (e) {
-
       let file = e.target.files[0]
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
-        // console.log('UPLOADED');
-      }).catch(function(error){console.log(error)})
+        this.closeUpload()
+      }.bind(this)).catch(function(error){console.log(error)})
+    },
+    removeProfilePhoto () {
+      let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+      storageRef.delete().then(function(){
+        this.closeUpload()
+      }.bind(this)).catch(function(error){ console.log('Error', error)} )
     },
     closeUpload () {
       this.showUpload = false
@@ -111,16 +115,13 @@ export default {
   created () {
     const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
     userProfilePhotoRef.getDownloadURL().then((url) => {
-      // console.log('successful download');
       this.profilePhotoUrl = url
     }).catch((error) => {
-      // console.log('FAILED download');
       this.profilePhotoUrl = null
       return
     })
   },
   mounted () {
-    // console.log(this.uid, this.profilePhotoUrl);
     if (!this.uid) {
       router.push('/')
     }
@@ -128,12 +129,17 @@ export default {
 
     const userInfo = firebase.database().ref(`users/${this.uid}`)
     userInfo.on('value', (snapshot) => {
-      // console.log('userData grabbed', snapshot.val());
       this.userData = snapshot.val()
     })
   },
   updated () {
-    // console.log('update!!')
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      this.profilePhotoUrl = url
+    }).catch((error) => {
+      this.profilePhotoUrl = null
+      return
+    })
   }
 }
 </script>

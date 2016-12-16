@@ -1,14 +1,13 @@
 <template>
   <div v-bind:class="[!item.purchased ? 'panel-info' : 'panel-success', 'panel']">
         <div class="panel-heading">
-            <!-- <div v-if="profileImage" class="profile-bubble" v-bind:style="{borderColor: posterData.profileTheme}">
-              <img class="profile-image" :src="profileImage"/>
+            <div v-if="profilePhotoUrl !== null" class="profile-bubble" v-bind:style="profilePhoto">
             </div>
-            <div v-if="!profileImage" class="profile-bubble" v-bind:style="{backgroundColor: posterData.profileTheme}">
-              <span class="profile-initials">{{ posterData.initials }}</span>
-            </div> -->
+            <div v-if="profilePhotoUrl === null" class="profile-bubble" v-bind:style="profileTheme">
+              <span class="profile-initials">{{ userData.initials }}</span>
+            </div>
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-8 title-column">
                 <h4>
                   {{ item.name }}
                   <!-- <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a> -->
@@ -78,9 +77,27 @@ export default {
       itemData: {},
       users: {},
       posterData: {},
-      postProfilePhotoUrl: false,
-      profileImage: '',
+      profilePhotoUrl: null,
+      userData: false,
       linkData: null
+    })
+  },
+  computed: {
+    profilePhoto: function() {
+      return {
+        'background-image': `url(${this.profilePhotoUrl})`
+      }
+    },
+    profileTheme: function() {
+      return {
+        'background-color': this.userData.profileTheme
+      }
+    }
+  },
+  created () {
+    const userRef = firebase.database().ref().child(`users/${this.item.postedBy}`)
+    userRef.on('value', (snapshot) => {
+      this.userData = snapshot.val()
     })
   },
   mounted () {
@@ -90,6 +107,16 @@ export default {
     users.on('value', (snapshot) => {
       this.users = snapshot.val()
     })
+
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      console.log('Downloaded URL');
+      this.profilePhotoUrl = url
+    }).catch((error) => {
+      this.profilePhotoUrl = null
+      return
+    })
+
 
     // const postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
     // const postedByUserObject = this.users[postedByUserId]
@@ -147,11 +174,18 @@ h4 {
   margin: 3px;
 }
 .panel-heading {
+  position: relative;
   padding-top: 1px;
   padding-bottom: 1px;
 }
+
+.title-column {
+  padding-left: 55px;
+}
+
 .panel-body {
   padding-left: 0;
+  padding-top: 25px;
 }
 .right {
   text-align: right;
@@ -185,5 +219,26 @@ h4 {
 .spinner {
   font-size: 20px;
   float: right;
+}
+.profile-bubble{
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 3px solid white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-repeat: none;
+  background-position: center;
+  background-size: cover;
+  font-size: 14pt;
+  padding: 3%;
+  position: absolute;
+  z-index: 500;
+  top: -15px;
+  left: -10px;
+}
+.profile-initials {
+  color: white;
 }
 </style>
