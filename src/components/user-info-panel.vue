@@ -9,7 +9,7 @@
         <!-- file upload input -->
         <div v-if='showUpload' class='profile-upload-actions'>
           <label class='btn btn-primary'>
-            Upload Image<input type="file" @change="uploadPhoto" style="display: none;">
+            Upload Profile Photo<input type="file" @change="uploadPhoto" style="display: none;">
           </label>
           <button class="btn btn-danger" @click="closeUpload">Cancel</button>
         </div>
@@ -31,8 +31,6 @@
           v-on:click="showUpload = !showUpload"
         >
         </div>
-
-      <!-- <div @click="logout" class="logout">Logout</div> -->
     </div>
   </div>
   <div class="bottom-wrap">
@@ -78,13 +76,12 @@ export default {
   },
   methods: {
     uploadPhoto (e) {
-
       let file = e.target.files[0]
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
-        // console.log('UPLOADED');
-      }).catch(function(error){console.log(error)})
+        this.closeUpload()
+      }.bind(this)).catch(function(error){console.log(error)})
     },
     closeUpload () {
       this.showUpload = false
@@ -120,7 +117,6 @@ export default {
     })
   },
   mounted () {
-    // console.log(this.uid, this.profilePhotoUrl);
     if (!this.uid) {
       router.push('/')
     }
@@ -133,7 +129,13 @@ export default {
     })
   },
   updated () {
-    // console.log('update!!')
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      this.profilePhotoUrl = url
+    }).catch((error) => {
+      this.profilePhotoUrl = null
+      return
+    })
   }
 }
 </script>
