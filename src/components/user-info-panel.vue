@@ -11,6 +11,7 @@
           <label class='btn btn-primary'>
             Upload Profile Photo<input type="file" @change="uploadPhoto" style="display: none;">
           </label>
+          <button v-if='profilePhotoUrl !== null' class="btn btn-warning" @click="removeProfilePhoto">Remove Profile Photo</button>
           <button class="btn btn-danger" @click="closeUpload">Cancel</button>
         </div>
 
@@ -83,6 +84,12 @@ export default {
         this.closeUpload()
       }.bind(this)).catch(function(error){console.log(error)})
     },
+    removeProfilePhoto () {
+      let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+      storageRef.delete().then(function(){
+        this.closeUpload()
+      }.bind(this)).catch(function(error){ console.log('Error', error)} )
+    },
     closeUpload () {
       this.showUpload = false
     },
@@ -108,10 +115,8 @@ export default {
   created () {
     const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
     userProfilePhotoRef.getDownloadURL().then((url) => {
-      // console.log('successful download');
       this.profilePhotoUrl = url
     }).catch((error) => {
-      // console.log('FAILED download');
       this.profilePhotoUrl = null
       return
     })
@@ -124,7 +129,6 @@ export default {
 
     const userInfo = firebase.database().ref(`users/${this.uid}`)
     userInfo.on('value', (snapshot) => {
-      // console.log('userData grabbed', snapshot.val());
       this.userData = snapshot.val()
     })
   },
