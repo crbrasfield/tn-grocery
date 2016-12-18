@@ -44,10 +44,13 @@
                   <span class="pointer" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
                     <span class="pointer">{{ likeCount }}</span>
                     <i class="fa fa-star liked" aria-hidden="true"></i>
+                    <span class='liked-alert'>{{ likedBy }}</span>
+
                   </span>
                   <span class="pointer" @click="likeItem(itemKey)" v-else>
                     <span class="pointer">{{ likeCount }}</span>
                     <i class="fa fa-star-o" aria-hidden="true"></i>
+                    <span class='liked-alert'>{{ likedBy }}</span>
                   </span>
                 </div>
                 <div class="col-md-6 right">
@@ -92,6 +95,27 @@ export default {
       return {
         'background-color': this.userData.profileTheme
       }
+    },
+    likedBy: function() {
+      let keys = Object.keys(this.item.likes)
+      if (keys.length <= 0) { // returns if nobody has liked the post
+        return 'Be the first to star this post!'
+      }
+      let names = keys.map(function(key) {
+        if (key === document.cookie) {
+          return 'You'
+        } else {
+          return this.item.likes[key].likedBy
+        }
+      }.bind(this))
+      if (names.includes('You')) { // if the current user liked the post, prepend 'You' to list
+        let newNames = names.filter(function(name) {
+          return name !== 'You'
+        }.bind(this))
+        newNames.unshift('You')
+        return newNames.join(', ')
+      }
+      return names.join(', ')
     }
   },
   created () {
@@ -116,20 +140,6 @@ export default {
       this.profilePhotoUrl = null
       return
     })
-
-
-    // const postedByUserId = Object.keys(this.users).filter((userKey) => userKey === this.item.postedBy)
-    // const postedByUserObject = this.users[postedByUserId]
-    // this.posterData = postedByUserObject
-    //
-    //
-    // const postedByRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
-    // postedByRef.getDownloadURL().then((url) => {
-    //   this.profileImage = url
-    //   this.imagesLodaed = true
-    // }).catch((error) => {
-    //   return
-    // })
   },
   methods: {
     generateLinkPreview (itemLink) {
@@ -149,7 +159,10 @@ export default {
     },
     likeItem (key) {
       const uid = document.cookie
-      firebase.database().ref(`items/${key}/likes/${uid}`).set({liked: true})
+      firebase.database().ref(`items/${key}/likes/${uid}`).set({
+        liked: true,
+        likedBy: `${this.users[document.cookie].firstName} ${this.users[document.cookie].lastName}`
+      })
     },
     dislikeItem (key) {
       const uid = document.cookie
@@ -165,7 +178,7 @@ export default {
         return false
       }
     }
-  }
+  },
 }
 </script>
 
@@ -216,6 +229,25 @@ h4 {
 .pointer {
   cursor: pointer;
 }
+
+.pointer .liked-alert {
+  visibility: hidden;
+  background-color: rgba(29, 29, 29, .50);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid rgb(29, 29, 29);
+  padding: 5px 10px;
+  position: absolute;
+  left: 15%;
+  top: -5px;
+  z-index: 1;
+}
+
+.pointer:hover .liked-alert {
+  visibility: visible;
+}
+
 .spinner {
   font-size: 20px;
   float: right;
