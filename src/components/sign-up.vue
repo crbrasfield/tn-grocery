@@ -81,6 +81,17 @@ export default {
       errorMessage: ''
     })
   },
+  computed: {
+    randomColor: function() {
+      let brightness = Math.floor(Math.random() * (6 - 4)) + 1
+      let rgb =[Math.random() * 256, Math.random() * 256, Math.random() * 256]
+      let mixed = [brightness * 51, brightness * 51, brightness * 51]
+      let mixedRGB = [rgb[0] + mixed[0], rgb[1] + mixed[1], rgb[2] + mixed[2]].map(function(value){
+        return Math.round(value/2.0)
+      })
+      return `rgb(${mixedRGB.join(',')})`
+    }
+  },
   methods: {
     register () {
       if (!this.firstName || !this.lastName) {
@@ -119,8 +130,8 @@ export default {
         initials: `${this.firstName.substring(0,1).toUpperCase()}${this.lastName.substring(0,1).toUpperCase()}`,
         email,
         uid,
-        profileTheme: `rgb(0,${Math.floor((Math.random()) * 90) + 100},${Math.floor((Math.random() * 90)) + 100})`,
-        photo: null,
+        profileTheme: this.randomColor,
+        hasPhoto: false,
         admin: false
       })
     }
