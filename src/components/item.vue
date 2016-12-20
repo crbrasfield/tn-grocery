@@ -57,8 +57,8 @@
                   </span>
                 </div>
                 <div class="col-md-6 right">
-                  <div v-if="userIsAdmin() && !item.purchased" class="left pointer" @click="markAsPurchased(itemKey)">
-                    <i class="fa fa-check" aria-hidden="true"></i>Purchased
+                  <div v-if="userIsAdmin() && !item.purchased" class="left pointer map-button" @click="markAsPurchased(itemKey)">
+                    Mark as Purchased
                   </div>
                   <div v-if="postedByThisUser(item.postedBy)" class="pointer" @click="deleteItem(itemKey)">
                     <i class="fa fa-times cancel" aria-hidden="true"></i>Cancel
@@ -281,7 +281,7 @@ h4 {
   font-size: 20px;
   float: right;
 }
-.profile-bubble{
+.profile-bubble {
   height: 60px;
   width: 60px;
   border-radius: 50%;
@@ -301,5 +301,12 @@ h4 {
 }
 .profile-initials {
   color: white;
+}
+.map-button {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border: 1px solid #3c763d;
+  border-radius: 5px;
+  padding: 0 7px;
 }
 </style>
