@@ -97,10 +97,10 @@ export default {
       }
     },
     likedBy: function() {
-      let keys = Object.keys(this.item.likes)
-      if (keys.length <= 0) { // returns if nobody has liked the post
+      if (this.item.likes === undefined || this.item.likes === false) { // returns if nobody has liked the post
         return 'Be the first to star this post!'
       }
+      let keys = Object.keys(this.item.likes)
       let names = keys.map(function(key) {
         if (key === document.cookie) {
           return 'You'
@@ -124,6 +124,15 @@ export default {
       this.userData = snapshot.val()
     })
   },
+  beforeUpdate () {
+    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+    userProfilePhotoRef.getDownloadURL().then((url) => {
+      this.profilePhotoUrl = url
+    }).catch((error) => {
+      this.profilePhotoUrl = null
+      return
+    })
+  },
   mounted () {
     this.generateLinkPreview(this.item.link)
 
@@ -134,7 +143,6 @@ export default {
 
     const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
     userProfilePhotoRef.getDownloadURL().then((url) => {
-      console.log('Downloaded URL');
       this.profilePhotoUrl = url
     }).catch((error) => {
       this.profilePhotoUrl = null
@@ -144,7 +152,6 @@ export default {
   methods: {
     generateLinkPreview (itemLink) {
       linkPreview(itemLink).then((res) => {
-        console.log(res.body);
         this.linkData = res.body
       })
     },
