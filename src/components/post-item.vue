@@ -176,6 +176,7 @@ export default {
 
 .office-input-wrap {
   display: flex;
+  align-items: center;
   margin-bottom: 10px;
 }
 

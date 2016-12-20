@@ -40,10 +40,14 @@
           <div class="col-md-12">
             {{ item.description }}
           </div>
+          <div class='col-md-12 post-info'>
+            <span class='posted-by'> {{ this.userData.firstName }} {{ this.userData.lastName }}</span>
+            <span class='posted-at'>{{ createdAt }}</span>
+          </div>
         </div>
             <div class="panel-footer footer">
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <span class="pointer" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
                     <span class="pointer">{{ likeCount }}</span>
                     <i class="fa fa-star liked" aria-hidden="true"></i>
@@ -56,9 +60,9 @@
                     <span class='liked-alert'>{{ likedBy }}</span>
                   </span>
                 </div>
-                <div class="col-md-6 right">
-                  <div v-if="userIsAdmin() && !item.purchased" class="left pointer map-button" @click="markAsPurchased(itemKey)">
-                    Mark as Purchased
+                <div class="col-md-8 right">
+                  <div v-if="userIsAdmin() && !item.purchased" class="left pointer" @click="markAsPurchased(itemKey)">
+                    <i class="fa fa-check" aria-hidden="true"></i>Purchased
                   </div>
                   <div v-if="postedByThisUser(item.postedBy)" class="pointer" @click="deleteItem(itemKey)">
                     <i class="fa fa-times cancel" aria-hidden="true"></i>Cancel
@@ -72,6 +76,7 @@
 <script>
 import { linkPreview } from '../link-preview.js'
 import LinkPreview from './link-preview.vue'
+import moment from 'moment'
 export default {
   name: 'item',
   props: ['item', 'itemKey', 'hasBeenLiked', 'likeCount'],
@@ -80,9 +85,7 @@ export default {
   },
   data () {
     return ({
-      itemData: {},
       users: {},
-      posterData: {},
       profilePhotoUrl: false,
       userData: false,
       linkData: null
@@ -123,6 +126,9 @@ export default {
         return newNames.join(', ')
       }
       return names.join(', ')
+    },
+    createdAt: function(){
+      return moment(this.item.createdAt).format('MMM Do h:mm A')
     }
   },
   created () {
@@ -228,6 +234,7 @@ h4 {
 .panel-body {
   padding-left: 0;
   padding-top: 25px;
+  padding-bottom: 5px;
 }
 .right {
   text-align: right;
@@ -308,5 +315,24 @@ h4 {
   border: 1px solid #3c763d;
   border-radius: 5px;
   padding: 0 7px;
+}
+
+.post-info {
+  text-align: right;
+  padding: 0;
+}
+
+.posted-by {
+  color: silver;
+  display: block;
+  font-size: 10pt;
+  line-height: 13pt;
+}
+
+.posted-at {
+  color: silver;
+  display: block;
+  font-size: 10pt;
+  line-height: 13pt;
 }
 </style>
