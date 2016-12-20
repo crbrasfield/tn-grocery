@@ -10,7 +10,6 @@
               <div class="col-md-8 title-column">
                 <h4>
                   {{ item.name }}
-                  <!-- <a v-if="item.link" class="item-link" :href="item.link" target="_blank">View</a> -->
                 </h4>
               </div>
               <div class="col-md-2 office">
@@ -27,8 +26,12 @@
         </div>
         </div>
         <div class="panel-body">
-          <div v-if="item.link && !linkDataReady()" class="">
-            <i class="spinner fa fa-spinner fa-spin fa-3x fa-fw"></i>
+          <div v-if="item.link && !linkDataReady()" class="col-md-12">
+            <a class="link" :href="item.link" target="_blank">
+              <i class="fa fa-search" aria-hidden="true"></i>
+              View Item
+            </a>
+            <br>
           </div>
           <div v-if="item.link && linkDataReady()" class="col-md-12">
             <LinkPreview :item-data="linkData" />
@@ -87,13 +90,17 @@ export default {
   },
   computed: {
     profilePhoto: function() {
-      return {
-        'background-image': `url(${this.profilePhotoUrl})`
+      if (this.profilePhotoUrl) {
+        return {
+          'background-image': `url(${this.profilePhotoUrl})`
+        }
       }
     },
     profileTheme: function() {
-      return {
-        'background-color': this.userData.profileTheme
+      if (this.userData.profileTheme) {
+        return {
+          'background-color': this.userData.profileTheme
+        }
       }
     },
     likedBy: function() {
@@ -145,7 +152,7 @@ export default {
       this.users = snapshot.val()
     })
 
-    if (this.userData.hasPhoto){
+    if (this.userData.hasPhoto) {
       const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
       userProfilePhotoRef.getDownloadURL().then((url) => {
         this.profilePhotoUrl = url
@@ -159,8 +166,11 @@ export default {
   },
   methods: {
     generateLinkPreview (itemLink) {
+      if (!itemLink) {
+        return
+      }
       linkPreview(itemLink).then((res) => {
-        this.linkData = res.body
+        this.linkData = res
       })
     },
     linkDataReady () {
@@ -205,6 +215,10 @@ h4 {
   position: relative;
   padding-top: 1px;
   padding-bottom: 1px;
+}
+
+.link {
+  text-decoration: none;
 }
 
 .title-column {
