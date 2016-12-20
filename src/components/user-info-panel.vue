@@ -11,13 +11,13 @@
           <label class='btn btn-primary'>
             Upload Profile Photo<input type="file" @change="uploadPhoto" style="display: none;">
           </label>
-          <button v-if='profilePhotoUrl !== null' class="btn btn-warning" @click="removeProfilePhoto">Remove Profile Photo</button>
+          <button v-if='profilePhotoUrl' class="btn btn-warning" @click="removeProfilePhoto">Remove Profile Photo</button>
           <button class="btn btn-danger" @click="closeUpload">Cancel</button>
         </div>
 
         <!-- Empty Profile Photo -->
         <div
-          v-if="this.profilePhotoUrl === null"
+          v-if="!this.profilePhotoUrl"
           class='profile-bubble'
           v-bind:style="emptyProfileBubble"
           v-on:click="showUpload = !showUpload"
@@ -26,7 +26,7 @@
         </div>
         <!-- Has Profile Photo -->
         <div
-          v-if="this.profilePhotoUrl !== null"
+          v-if="this.profilePhotoUrl"
           v-bind:style="profilePhoto"
           class='profile-bubble'
           v-on:click="showUpload = !showUpload"
@@ -52,7 +52,8 @@ export default {
       uid: document.cookie || '',
       userData: false,
       time: '',
-      profilePhotoUrl: null,
+      hasPhoto: false,
+      profilePhotoUrl: false,
       showUpload: false
     })
   },
@@ -81,14 +82,21 @@ export default {
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       let metadata = {customMetadata: {'uid': `${this.uid}`}}
       storageRef.put(file, metadata).then(function(snapshot){
+        this.updateUserHasPhoto(true) //update hasPhoto user prop
         this.closeUpload()
       }.bind(this)).catch(function(error){console.log(error)})
     },
     removeProfilePhoto () {
       let storageRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
       storageRef.delete().then(function(){
-        this.closeUpload()
+        this.updateUserHasPhoto(false) //update hasPhoto user prop
       }.bind(this)).catch(function(error){ console.log('Error', error)} )
+    },
+    updateUserHasPhoto (bool){
+      let userRef = firebase.database().ref(`users/${document.cookie}`)
+      userRef.update({
+        hasPhoto: bool
+      })
     },
     closeUpload () {
       this.showUpload = false
@@ -109,7 +117,6 @@ export default {
           return `Good evening, ${this.userData.firstName}!`
         }
       }
-
     }
   },
   created () {
@@ -117,7 +124,7 @@ export default {
     userProfilePhotoRef.getDownloadURL().then((url) => {
       this.profilePhotoUrl = url
     }).catch((error) => {
-      this.profilePhotoUrl = null
+      this.profilePhotoUrl = false
       return
     })
   },
@@ -133,13 +140,17 @@ export default {
     })
   },
   updated () {
-    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
-    userProfilePhotoRef.getDownloadURL().then((url) => {
-      this.profilePhotoUrl = url
-    }).catch((error) => {
-      this.profilePhotoUrl = null
-      return
-    })
+    if (this.userData.hasPhoto){ //conditional that prevents firebase from throwing errors after looking at ref that doesn't exist
+      const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${document.cookie}`)
+      userProfilePhotoRef.getDownloadURL().then((url) => {
+        this.profilePhotoUrl = url
+      }).catch((error) => {
+        this.profilePhotoUrl = false
+        return
+      })
+    } else {
+      this.profilePhotoUrl = false
+    }
   }
 }
 </script>

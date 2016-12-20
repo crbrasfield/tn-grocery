@@ -1,9 +1,9 @@
 <template>
   <div v-bind:class="[!item.purchased ? 'panel-info' : 'panel-success', 'panel']">
         <div class="panel-heading">
-            <div v-if="profilePhotoUrl !== null" class="profile-bubble" v-bind:style="profilePhoto">
+            <div v-if="profilePhotoUrl" class="profile-bubble" v-bind:style="profilePhoto">
             </div>
-            <div v-if="profilePhotoUrl === null" class="profile-bubble" v-bind:style="profileTheme">
+            <div v-if="!profilePhotoUrl" class="profile-bubble" v-bind:style="profileTheme">
               <span class="profile-initials">{{ userData.initials }}</span>
             </div>
             <div class="row">
@@ -80,7 +80,7 @@ export default {
       itemData: {},
       users: {},
       posterData: {},
-      profilePhotoUrl: null,
+      profilePhotoUrl: false,
       userData: false,
       linkData: null
     })
@@ -125,13 +125,17 @@ export default {
     })
   },
   beforeUpdate () {
-    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
-    userProfilePhotoRef.getDownloadURL().then((url) => {
-      this.profilePhotoUrl = url
-    }).catch((error) => {
-      this.profilePhotoUrl = null
-      return
-    })
+    if (this.userData.hasPhoto) {
+      const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+      userProfilePhotoRef.getDownloadURL().then((url) => {
+        this.profilePhotoUrl = url
+      }).catch((error) => {
+        this.profilePhotoUrl = false
+        return
+      })
+    } else {
+      this.profilePhotoUrl = false
+    }
   },
   mounted () {
     this.generateLinkPreview(this.item.link)
@@ -141,13 +145,17 @@ export default {
       this.users = snapshot.val()
     })
 
-    const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
-    userProfilePhotoRef.getDownloadURL().then((url) => {
-      this.profilePhotoUrl = url
-    }).catch((error) => {
-      this.profilePhotoUrl = null
-      return
-    })
+    if (this.userData.hasPhoto){
+      const userProfilePhotoRef = firebase.storage().ref(`profile-photos/${this.item.postedBy}`)
+      userProfilePhotoRef.getDownloadURL().then((url) => {
+        this.profilePhotoUrl = url
+      }).catch((error) => {
+        this.profilePhotoUrl = false
+        return
+      })
+    } else {
+      this.profilePhotoUrl = false
+    }
   },
   methods: {
     generateLinkPreview (itemLink) {
