@@ -47,7 +47,7 @@
         </div>
             <div class="panel-footer footer">
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-8">
                   <span class="pointer" @click="dislikeItem(itemKey)" v-if="!hasBeenLiked">
                     <span class="pointer">{{ likeCount }}</span>
                     <i class="fa fa-star liked" aria-hidden="true"></i>
@@ -60,7 +60,7 @@
                     <span class='liked-alert'>{{ likedBy }}</span>
                   </span>
                 </div>
-                <div class="col-md-8 right">
+                <div class="col-md-4 right">
                   <div v-if="userIsAdmin() && !item.purchased" class="left pointer" @click="markAsPurchased(itemKey)">
                     <i class="fa fa-check" aria-hidden="true"></i>Purchased
                   </div>
@@ -275,7 +275,7 @@ h4 {
   border: 1px solid rgb(29, 29, 29);
   padding: 5px 10px;
   position: absolute;
-  left: 15%;
+  left: 50px;
   top: -5px;
   z-index: 1;
 }

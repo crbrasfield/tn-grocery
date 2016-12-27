@@ -45,6 +45,11 @@
               <input type="radio" value="Dev" v-model="itemData.office">Dev
             </label>
           </div>
+          <div class="radio">
+            <label class=''>
+              <input type="radio" value="Remote" v-model="itemData.office">Remote
+            </label>
+          </div>
         </div>
       </div>
       <div class="office-right">
@@ -116,9 +121,10 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.post-item-wrap {
-  margin: 5px;
-  flex-direction: column;
+
+.panel.panel-body {
+  margin-bottom: 0;
+  padding-bottom: 5px;
 }
 .post-item {
   display: flex;
@@ -176,7 +182,8 @@ export default {
 
 .office-input-wrap {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 10px;
 }
 
